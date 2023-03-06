@@ -4,12 +4,18 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import store from "./stores";
+import Register from './Screens/RegisterScreen'
 import LandingPage from "./Screens/LandingScreen";
 import CategoryDetail from "./Screens/CategoryDetailScreen";
 import Gamescreen from "./Screens/GameScreen";
 import ResultScreen from "./Screens/ResultScreen";
 import LoginPage from "./Screens/LoginScreen";
 import HomePage from "./Screens/HomePageScreen";
+import ProfilePage from "./Screens/ProfileScreen";
+import HomePage from "./Screens/HomePageScreen";
+import { SafeAreaView } from "react-native";
+
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -43,6 +49,7 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
     return (
+        <SafeAreaView style={{flex:1}}>
         <Provider store={store}>
             <NavigationContainer>
                 <Stack.Navigator>
@@ -58,5 +65,6 @@ export default function App() {
                 </Stack.Navigator>
             </NavigationContainer>
         </Provider>
+        </SafeAreaView>
     );
 }
