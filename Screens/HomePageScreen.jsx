@@ -1,6 +1,41 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Pressable, Image, ScrollViewBase } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Pressable, Image, ScrollViewBase, FlatList } from "react-native";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BASE_URL } from "../helpers/ip";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function HomePage() {
+export default function HomePage({ navigation }) {
+    const [categories, setCategories] = useState();
+    const [loadingCategories, setLoadingCategories] = useState(true);
+
+    //! Pindah page ke category Detail yang dipilih
+    const handleChooseCategory = (categoryId) => {
+        navigation.navigate("CategoryDetail", categoryId);
+    };
+
+    //! Fetch All Categories
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data: categories } = await axios({
+                    method: "GET",
+                    url: `http://${BASE_URL}:3000/categories`,
+                    headers: {
+                        access_token: await AsyncStorage.getItem("access_token"),
+                    },
+                });
+                setCategories(categories);
+                setLoadingCategories(false);
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, []);
+
+    if (loadingCategories) {
+        return <Text>Masih loading category....</Text>;
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.profileContainer}>
@@ -13,35 +48,19 @@ export default function HomePage() {
                     /> */}
                 </View>
             </View>
-            <View style={styles.header}>
-                <Text style={styles.fontHeader}>Choose Category</Text>
-            </View>
-            <ScrollView Veritical style={styles.scrollContainer}>
+            <ScrollView Vertical style={styles.scrollContainer}>
+                <View style={styles.header}>
+                    <Text style={styles.fontHeader}>Choose Category</Text>
+                </View>
                 <View style={styles.categoryContainer}>
-                    <Pressable style={styles.categoryBox1}>
-                        <Text style={styles.fontText}>MYTHOLOGY</Text>
-                        {/* <Image style={styles.icon} source={require("../assets/icons8-mythology-62.png")} /> */}
-                    </Pressable>
-                    <Pressable style={styles.categoryBox2}>
-                        <Text style={styles.fontText}>SCIENCE</Text>
-                        {/* <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} /> */}
-                    </Pressable>
-                    <Pressable style={styles.categoryBox2}>
-                        <Text style={styles.fontText}>SCIENCE</Text>
-                        {/* <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} /> */}
-                    </Pressable>
-                    <Pressable style={styles.categoryBox2}>
-                        <Text style={styles.fontText}>SCIENCE</Text>
-                        {/* <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} /> */}
-                    </Pressable>
-                    <Pressable style={styles.categoryBox2}>
-                        <Text style={styles.fontText}>SCIENCE</Text>
-                        {/* <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} /> */}
-                    </Pressable>
-                    <Pressable style={styles.categoryBox2}>
-                        <Text style={styles.fontText}>SCIENCE</Text>
-                        {/* <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} /> */}
-                    </Pressable>
+                    {categories?.map((category, i) => {
+                        return (
+                            <Pressable key={`categoriess ${i}`} style={styles.categoryBox1} onPress={() => handleChooseCategory(category.id)}>
+                                <Text style={styles.fontText}>{category.name}</Text>
+                                {/* <Image style={styles.icon} source={require("../assets/icons8-mythology-62.png")} /> */}
+                            </Pressable>
+                        );
+                    })}
                 </View>
             </ScrollView>
         </View>
@@ -120,22 +139,20 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         width: "100%",
-        height: "100%",
         // paddingBottom:600,
         // marginBottom:600
         // backgroundColor: "red",
     },
     categoryContainer: {
         // backgroundColor: "pink",
-        height: "100%",
-        marginTop: 10,
+        marginTop: 5,
         padding: 30,
         alignItems: "center",
     },
     categoryBox1: {
         backgroundColor: "#A1D4D4",
         width: "90%",
-        height: "15%",
+        height: "2%",
         borderRadius: 30,
         justifyContent: "center",
         alignItems: "center",

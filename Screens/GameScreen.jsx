@@ -11,7 +11,7 @@ import db from "../config/firebaseConnection";
 import { useFocusEffect } from "@react-navigation/native";
 import { BASE_URL } from "../helpers/ip";
 export default function Gamescreen({ route, navigation }) {
-    const { roomId } = route.params;
+    const { roomId, categoryValue } = route.params;
     const [room, setRoom] = useState({});
     const [questions, setQuestions] = useState([]);
     const [time, setTime] = useState(10);
@@ -94,7 +94,7 @@ export default function Gamescreen({ route, navigation }) {
                 try {
                     const { data: questions } = await axios({
                         method: "GET",
-                        url: `http://${BASE_URL}:3000/questions/31`,
+                        url: `http://${BASE_URL}:3000/questions/${categoryValue}`,
                         headers: {
                             access_token: await AsyncStorage.getItem("access_token"),
                         },

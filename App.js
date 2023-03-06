@@ -5,12 +5,11 @@ import { Provider } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import store from "./stores";
 import LandingPage from "./Screens/LandingScreen";
-import LoginPage from "./Screens/LoginScreen";
 import CategoryDetail from "./Screens/CategoryDetailScreen";
 import Gamescreen from "./Screens/GameScreen";
 import ResultScreen from "./Screens/ResultScreen";
 import LoginPage from "./Screens/LoginScreen";
-
+import HomePage from "./Screens/HomePageScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -45,18 +44,19 @@ const Tab = createBottomTabNavigator();
 export default function App() {
     return (
         <Provider store={store}>
-            {/* <NavigationContainer>
+            <NavigationContainer>
                 <Stack.Navigator>
+                    {/* <Stack.Screen name="HomePage" component={HomePage} /> */}
                     <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
                     {/* <Stack.Screen name="Register" component={Register} options={{ headerTitle: "" }} /> */}
                     <Stack.Screen name="Login" component={LoginPage} />
                     <Stack.Screen name="Home" component={HomePage} />
+                    <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
                     {/* <Stack.Screen name="Home" component={ShowTab} options={{ headerShown: false }} /> */}
-                    {/* <Stack.Screen name="Gamescreen" component={Gamescreen} /> */}
-                    {/* <Stack.Screen name="ResultScreen" component={ResultScreen} /> */}
+                    <Stack.Screen name="Gamescreen" component={Gamescreen} />
+                    <Stack.Screen name="ResultScreen" component={ResultScreen} />
                 </Stack.Navigator>
-            </NavigationContainer> */}
-            <ProfilePage/>
+            </NavigationContainer>
         </Provider>
     );
 }
