@@ -30,7 +30,6 @@ const LoginPage = ({ navigation }) => {
     };
 
     return (
-        <ScrollView>
             <View style={styles.container}>
                 <View style={styles.textContainer}>
                     <Image source={require("../assets/image.png")} style={styles.image} />
@@ -57,7 +56,7 @@ const LoginPage = ({ navigation }) => {
                     <Text style={styles.textButton}>LOGIN</Text>
                 </Pressable>
             </View>
-        </ScrollView>
+       
     );
 };
 
@@ -65,8 +64,8 @@ const styles = StyleSheet.create({
     image: {
         height: 150,
         width: 300,
-        marginBottom: 30,
-        marginTop: 100,
+        marginBottom: 10,
+        marginTop: 5,
     },
     container: {
         // flex: 1,
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFE59E",
     },
     textContainer: {
-        marginTop: 250,
+        marginTop: 100,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -98,7 +97,7 @@ const styles = StyleSheet.create({
         marginTop: 80,
         width: "90%",
         height: "40%",
-        marginBottom: 10,
+        marginBottom: 3,
     },
     textInput: {
         textAlignVertical: "center",
@@ -114,10 +113,10 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
     },
     button: {
-        marginTop: 10,
+        marginTop: 5,
         width: "60%",
         height: "8%",
-        marginBottom: 300,
+        marginBottom: 74,
         borderRadius: 20,
         borderWidth: 2,
         backgroundColor: "white",

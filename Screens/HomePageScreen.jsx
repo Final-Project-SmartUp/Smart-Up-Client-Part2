@@ -63,7 +63,8 @@ export default function HomePage({ navigation }) {
                     })}
                 </View>
             </ScrollView>
-        </View>
+            </View>
+        
     );
 }
 
@@ -98,15 +99,16 @@ export default function HomePage({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         //  backgroundColor:'red',
-        height: "100%",
+        flex:1,
+        // height: "100%",
         padding: 10,
-        width: "100%",
+        // width: "100%",
     },
     profileContainer: {
-        // flex:1,
-        marginTop: 40,
-        height: "5%",
-        width: "100%",
+        flex:1,
+        // marginTop: 40,
+        // height: "5%",
+        // width: "100%",
         // backgroundColor:'pink',
         justifyContent: "flex-end",
         alignItems: "flex-end",
@@ -127,8 +129,9 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     header: {
-        height: "5%",
-        marginTop: 20,
+        // height: "5%",
+        // marginTop: 20,
+        flex:1
         // backgroundColor:'yellow'
     },
     fontHeader: {

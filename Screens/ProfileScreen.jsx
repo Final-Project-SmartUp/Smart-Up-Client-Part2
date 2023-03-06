@@ -1,16 +1,18 @@
-import React from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import React from "react";
+import { StyleSheet, View, Image, Text, ScrollView } from "react-native";
 
 const ProfilePage = () => {
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
-      <Image
-        style={styles.profileImage}
-        source={{uri: 'https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png'}}
-      />
-      <Text style={styles.name}>Daffa Sarung</Text>
-      <Text style={styles.description}>Quiz Profile</Text>
+        <Text style={styles.description}>Profile</Text>
+        <Image
+          style={styles.profileImage}
+          source={{
+            uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+          }}
+        />
+        <Text style={styles.name}>Daffa Sarung</Text>
       </View>
       <View style={styles.stats}>
         <View style={styles.statMmrContainer}>
@@ -26,8 +28,70 @@ const ProfilePage = () => {
           <Text style={styles.statValue}>25</Text>
         </View>
       </View>
-      <View style={styles.accountContainer}>
-        <Text>Hi</Text>
+      <View style={styles.friendListContainer}>
+        <View style={styles.friendList}>
+          <Text style={styles.fontFriendList}>Friend List:</Text>
+          <ScrollView Vertical style={{ height: "auto" }}>
+            <View style={styles.categoryContainer}>
+              <View style={{ width: "15%" }}>
+                <View style={styles.categoryBox2}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                    }}
+                  />
+                </View>
+                <View style={styles.categoryBox2}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                    }}
+                  />
+                </View>
+                <View style={styles.categoryBox2}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                    }}
+                  />
+                </View>
+                <View style={styles.categoryBox2}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                    }}
+                  />
+                </View>
+                <View style={styles.categoryBox2}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                    }}
+                  />
+                </View>
+                <View style={styles.categoryBox2}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                    }}
+                  />
+                </View>
+              </View>
+              <View style={{ width: "57%", marginLeft: 30, marginTop: 10 }}>
+                <Text style={styles.friendListFont}>Willy Chu</Text>
+                <Text style={styles.friendListFont}>Beauty Dominique</Text>
+                <Text style={styles.friendListFont}>Ananta Sophan</Text>
+                <Text style={styles.friendListFont}>Sophia Latjuba</Text>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
       </View>
     </View>
   );
@@ -35,22 +99,22 @@ const ProfilePage = () => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    // backgroundColor:'yellow',
-    height:'100%',
-    justifyContent:'flex-start'
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#9FADAD",
+    height: "100%",
+    justifyContent: "flex-start",
   },
-  profileContainer:{
+  profileContainer: {
     // flex:1,
-    marginTop:50,
+    marginTop: 50,
     // backgroundColor:'red',
-    width:'100%',
-    height:'30%',
-    justifyContent:'center',
-    alignItems:'center',
-    borderBottomWidth:1
+    width: "100%",
+    height: "30%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#C0C791",
   },
   profileImage: {
     width: 150,
@@ -60,65 +124,120 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
+    color: "white",
   },
   description: {
-    fontSize: 18,
-    color: '#777',
+    fontSize: 25,
+    color: "white",
     marginBottom: 20,
+    fontWeight: "bold",
+    letterSpacing: 1,
   },
   stats: {
-    flexDirection: 'row',
-    alignItems:'center',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginTop:20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    width: "100%",
+    marginTop: 20,
     // backgroundColor:'red',
-    justifyContent:'flex-start'
+    justifyContent: "flex-start",
   },
 
   statMmrContainer: {
-    alignItems: 'center',
-    marginRight:100,
-    marginLeft:30,
-    justifyContent:'flex-start',
-    backgroundColor:'yellow'
+    alignItems: "center",
+    marginRight: 97,
+    marginLeft: 30,
+    justifyContent: "flex-start",
+    // backgroundColor:'yellow'
   },
   statRankContainer: {
-    alignItems: 'center',
-    marginRight:120,
-    marginLeft:20,
-    backgroundColor:'yellow'
+    alignItems: "center",
+    marginRight: 120,
+    marginLeft: 20,
+    // backgroundColor:'yellow'
   },
   statRank: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
+    color:'white'
   },
   statPostContainer: {
-    alignItems: 'center',
-    backgroundColor:'yellow',
+    alignItems: "center",
+    // backgroundColor:'yellow',
   },
   statPost: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
+    color:'white'
   },
   statValue: {
     fontSize: 16,
-    color: '#777',
+    color: "white",
   },
-  accountContainer:{
-    backgroundColor:'purple',
-    width:'100%',
-    height:'70%',
-    marginTop:30,
-    borderRadius:60,
-    justifyContent:'flex-start',
-    paddingTop:60,
-    alignItems:'center'
-  }
+  friendListContainer: {
+    backgroundColor: "white",
+    width: "100%",
+    height: "70%",
+    marginTop: 30,
+    borderRadius: 60,
+    justifyContent: "flex-start",
+    paddingTop: 60,
+    padding: 30,
+    alignItems: "flex-start",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+
+    elevation: 9,
+  },
+  friendList: {
+    justifyContent: "flex-start",
+    // backgroundColor: "red",
+    width: "100%",
+  },
+  image: {
+    width: "80%",
+    height: "80%",
+    borderRadius: 100,
+  },
+  fontFriendList: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#9FADAD",
+  },
+  categoryContainer: {
+    // backgroundColor: "pink",
+    height: "auto",
+    marginTop: 5,
+    padding: 30,
+    // alignItems: "center",
+    flexDirection: "row",
+  },
+
+  categoryBox2: {
+    backgroundColor: "#9FADAD",
+    width: "100%",
+    height: "10%",
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 40,
+    flexDirection: "row",
+  },
+  fontText: {
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 10,
+  },
+  friendListFont: { marginBottom: 67 },
 });
 
 export default ProfilePage;
