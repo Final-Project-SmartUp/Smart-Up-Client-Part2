@@ -10,8 +10,7 @@ export default function HomePage({ navigation }) {
 
     //! Pindah page ke category Detail yang dipilih
     const handleChooseCategory = (categoryId) => {
-        console.log(categoryId, "<<<");
-        navigation.navigate("CategoryDetail", categoryId);
+        navigation.navigate("CategoryDetail", { categoryId });
     };
 
     //! Fetch All Categories

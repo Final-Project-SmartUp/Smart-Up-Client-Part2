@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import db from "../config/firebaseConnection";
@@ -8,12 +8,14 @@ import { onSnapshot } from "firebase/firestore";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { BASE_URL } from "../helpers/ip";
 import Post from "../Components/Post";
+import { useFocusEffect } from "@react-navigation/core";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPosts } from "../stores/actions/actionCreator";
 
 export default function CategoryDetail({ navigation, route }) {
-    const categoryId = route.params;
+    const { categoryId } = route.params;
     const [categoryDetail, setCategoryDetail] = useState();
     const [allPosts, setAllPosts] = useState();
-    const [loadingPosts, setLoadingPosts] = useState(true);
     const [loadingCategoryDetail, setLoadingCategoryDetail] = useState(true);
     const [currentUser, setCurrentUser] = useState({
         userId: "",
@@ -21,6 +23,8 @@ export default function CategoryDetail({ navigation, route }) {
         isFindMatch: "",
         isPlaying: "",
     });
+    const dispatch = useDispatch();
+    const { fetchPostsLoading, posts, errorMsg } = useSelector((state) => state.post);
 
     const playGame = async () => {
         try {
@@ -44,7 +48,6 @@ export default function CategoryDetail({ navigation, route }) {
                         access_token: await AsyncStorage.getItem("access_token"),
                     },
                 });
-
                 setCategoryDetail(CategoryDetail);
                 setLoadingCategoryDetail(false);
             } catch (err) {
@@ -55,21 +58,7 @@ export default function CategoryDetail({ navigation, route }) {
 
     //! Fetch All Posts By CategoryId
     useEffect(() => {
-        (async () => {
-            try {
-                const { data: Posts } = await axios({
-                    method: "GET",
-                    url: `http://${BASE_URL}:3000/posts/${categoryId}`,
-                    headers: {
-                        access_token: await AsyncStorage.getItem("access_token"),
-                    },
-                });
-                setAllPosts(Posts);
-                setLoadingPosts(false);
-            } catch (err) {
-                console.log(err);
-            }
-        })();
+        dispatch(fetchPosts(categoryId));
     }, []);
 
     useEffect(() => {
@@ -162,14 +151,14 @@ export default function CategoryDetail({ navigation, route }) {
 
     //! Add Post
     const handleAddPost = () => {
-        navigation.navigate("AddPostScreen");
+        navigation.navigate("AddPostScreen", categoryId);
     };
 
     if (loadingCategoryDetail) {
         return <Text>Masih Loading categoryDetail...</Text>;
     }
 
-    if (loadingPosts) {
+    if (fetchPostsLoading) {
         return <Text>Masih Loading Posts....</Text>;
     }
 
@@ -184,7 +173,7 @@ export default function CategoryDetail({ navigation, route }) {
                         <Image
                             style={styles.imageCategory}
                             source={{
-                                uri: "https://img.freepik.com/free-vector/characters-celebrating-holi-festival-concept_23-2148405462.jpg?w=1060&t=st=1677830591~exp=1677831191~hmac=cb58a785423477d3131c5bc4d671edd861a29192d02521e4fe9431928c177f8e",
+                                uri: categoryDetail.imageUrl,
                             }}
                         />
                     </View>
@@ -198,9 +187,9 @@ export default function CategoryDetail({ navigation, route }) {
                     <TouchableOpacity onPress={() => handleAddPost(categoryId)}>
                         <Text>Add Post</Text>
                     </TouchableOpacity>
-                    {allPosts.length !== 0 ? (
-                        allPosts.map((el, i) => {
-                            return <Post key={`post ${i}`} />;
+                    {posts.length !== 0 ? (
+                        posts.map((el, i) => {
+                            return <Post key={`post ${i}`} post={el} navigation={navigation} />;
                         })
                     ) : (
                         <Text>Not Post available yet...</Text>

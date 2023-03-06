@@ -1,8 +1,51 @@
-import React from "react";
-import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { BASE_URL } from "../helpers/ip";
 
-export default function PostDetail() {
-    const [message, setMessage] = React.useState("");
+export default function PostDetail({ route, navigation }) {
+    const postId = route.params;
+    console.log(postId, "ini post Id");
+    const [postWithComments, setPostWithComments] = useState();
+    const [loadingPostDetail, setLoadingPostDetail] = useState(true);
+    const [userPost, setUserPost] = useState();
+    const [loadingUserPost, setLoadingUserPost] = useState(true);
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data: postDetail } = await axios({
+                    method: "GET",
+                    url: `http://${BASE_URL}:3000/posts/postDetail/${postId}`,
+                    headers: {
+                        access_token: await AsyncStorage.getItem("access_token"),
+                    },
+                });
+
+                const { data: user } = await axios({
+                    method: "GET",
+                    url: `http://${BASE_URL}:3001/users/${postDetail.UserId}`,
+                });
+                setUserPost(user);
+                setPostWithComments(postDetail);
+                setLoadingPostDetail(false);
+                setLoadingUserPost(false);
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, []);
+
+    const [message, setMessage] = useState();
+
+    const handleAddComment = () => {
+        navigation.navigate("AddCommentScreen", postId);
+    };
+
+    if (loadingPostDetail || loadingUserPost) {
+        return <Text>Masih Loading....</Text>;
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.insideContainer}>
@@ -16,13 +59,38 @@ export default function PostDetail() {
                         />
                     </View>
                     <Text style={styles.textProfileName}>
-                        <Text style={styles.boldStyle}>Daffa the boy</Text>
+                        <Text style={styles.boldStyle}>{userPost.profileName}</Text>
                         <Text> posted in</Text>
-                        <Text style={styles.boldStyle}> Mythology</Text>
+                        <Text style={styles.boldStyle}> {postWithComments.Category.name}</Text>
                     </Text>
                 </View>
                 <View style={styles.postContainer}>
-                    <Text style={styles.textPost}>We are the muses goddes of the arts and proclaimers of heroes, heroes like herculers</Text>
+                    <Text style={styles.textPost}>{postWithComments.description}</Text>
+                </View>
+                <View>
+                    <TouchableOpacity onPress={() => handleAddComment()}>
+                        <Text>Add Comment</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.profileReplyContainer}>
+                    <View style={styles.profileImageReplyContainer}>
+                        <Image
+                            style={styles.imageReply}
+                            source={{
+                                uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                            }}
+                        />
+                    </View>
+
+                    <View style={styles.replyContainer}>
+                        <Text style={styles.textProfileNameReply}>Daffa the Boy</Text>
+                        <View style={styles.boxComment}>
+                            <View style={styles.commentContainer}>
+                                <Text style={styles.reply}>Hello anjjhhh </Text>
+                            </View>
+                        </View>
+                    </View>
                 </View>
                 <View style={styles.profileReplyContainer}>
                     <View style={styles.profileImageReplyContainer}>
@@ -33,6 +101,7 @@ export default function PostDetail() {
                             }}
                         />
                     </View>
+
                     <View style={styles.replyContainer}>
                         <Text style={styles.textProfileNameReply}>Daffa the Boy</Text>
                         <View style={styles.boxComment}>
@@ -42,6 +111,7 @@ export default function PostDetail() {
                         </View>
                     </View>
                 </View>
+
                 <View style={styles.profileReplyContainerNext}>
                     <View style={styles.profileImageReplyContainerNext}>
                         <Image
@@ -129,12 +199,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     profileReplyContainer: {
-        height: "15%",
+        height: "10%",
         flexDirection: "row",
         justifyContent: "flex-start",
-        padding: 5,
+        paddingLeft: 5,
         alignItems: "center",
         marginTop: 1,
+        backgroundColor: "red",
     },
     profileReplyContainerNext: {
         height: "15%",
@@ -153,18 +224,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    profileImageReplyContainer: {
-        width: "8%",
-        height: "30%",
-        backgroundColor: "#A8D978",
-        borderRadius: 100,
-        alignItems: "center",
-        justifyContent: "center",
-    },
+
     imageReply: {
-        width: "80%",
-        height: "80%",
-        borderRadius: 100,
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        resizeMode: "contain",
     },
     textProfileNameReply: {
         marginLeft: 10,

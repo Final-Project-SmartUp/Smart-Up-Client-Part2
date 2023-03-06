@@ -18,6 +18,9 @@ import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "react-native";
 import AddPost from "./Screens/AddPostScreen";
+import PostDetail from "./Screens/PostDetailScreen";
+import AddCommentScreen from "./Screens/AddCommentScreen";
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -79,7 +82,10 @@ export default function App() {
                                 <Stack.Screen name="Login" component={LoginPage} /> */}
                                 <Stack.Screen name="Home" component={HomePage} />
                                 <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
+                                <Stack.Screen name="PostDetailScreen" component={PostDetail} />
                                 <Stack.Screen name="AddPostScreen" component={AddPost} />
+
+                                <Stack.Screen name="AddCommentScreen" component={AddCommentScreen} />
                                 {/* <Stack.Screen name="Home" component={ShowTab} options={{ headerShown: false }} /> */}
                                 <Stack.Screen name="Gamescreen" component={Gamescreen} />
                                 <Stack.Screen name="ResultScreen" component={ResultScreen} />

@@ -1,8 +1,39 @@
-import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet } from "react-native";
-import React from "react";
+import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, Touchable, TouchableOpacity } from "react-native";
+import axios from "axios";
+import { useState } from "react";
+import { BASE_URL } from "../helpers/ip";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
+import { fetchPosts } from "../stores/actions/actionCreator";
 
-export default function AddPost() {
-    const [post, setPost] = React.useState("");
+export default function AddPost({ route, navigation }) {
+    const categoryId = route.params;
+    const [post, setPost] = useState("");
+    const dispatch = useDispatch();
+
+    //! Add Post
+    const addPosting = async () => {
+        try {
+            const { data } = await axios({
+                method: "POST",
+                url: `http://${BASE_URL}:3000/posts`,
+                data: {
+                    title: post,
+                    description: post,
+                    userId: await AsyncStorage.getItem("userId"),
+                    categoryId: categoryId,
+                },
+                headers: {
+                    access_token: await AsyncStorage.getItem("access_token"),
+                },
+            });
+            dispatch(fetchPosts(categoryId));
+            navigation.navigate("CategoryDetail", { categoryId });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.exit}>{/* <Image style={styles.icon} source={require("../assets/icons8-close-window-48.png")} /> */}</View>
@@ -18,9 +49,9 @@ export default function AddPost() {
                 <View style={styles.inputTextContainer}>
                     <TextInput placeholder="What's happening?" placeholderTextColor="#C0C0C0" editable multiline numberOfLines={4} maxLength={40} value={post} onChangeText={(post) => setPost(post)} style={styles.textInput} />
                     <View style={styles.postButtonContainer}>
-                        <View style={styles.postButton}>
+                        <TouchableOpacity style={styles.postButton} onPress={addPosting}>
                             <Text style={styles.textPost}>POST</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
