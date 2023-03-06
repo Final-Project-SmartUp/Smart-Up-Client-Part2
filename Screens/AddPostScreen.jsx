@@ -5,9 +5,7 @@ export default function AddPost() {
     const [post, setPost] = React.useState("");
     return (
         <View style={styles.container}>
-            <View style={styles.exit}>
-                <Image style={styles.icon} source={require("../assets/icons8-close-window-48.png")} />
-            </View>
+            <View style={styles.exit}>{/* <Image style={styles.icon} source={require("../assets/icons8-close-window-48.png")} /> */}</View>
             <View style={styles.postSection}>
                 <View style={styles.profilePictureContainer}>
                     <Image

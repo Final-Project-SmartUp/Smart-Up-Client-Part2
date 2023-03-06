@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet } from "react-native";
+import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import db from "../config/firebaseConnection";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,7 +9,12 @@ import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { BASE_URL } from "../helpers/ip";
 import Post from "../Components/Post";
 
-export default function CategoryDetail({ navigation }) {
+export default function CategoryDetail({ navigation, route }) {
+    const categoryId = route.params;
+    const [categoryDetail, setCategoryDetail] = useState();
+    const [allPosts, setAllPosts] = useState();
+    const [loadingPosts, setLoadingPosts] = useState(true);
+    const [loadingCategoryDetail, setLoadingCategoryDetail] = useState(true);
     const [currentUser, setCurrentUser] = useState({
         userId: "",
         username: "",
@@ -23,12 +28,11 @@ export default function CategoryDetail({ navigation }) {
             const newUpdate = await updateDoc(userRef, {
                 isFindMatch: true,
             });
-            console.log(newUpdate,"<<<<<<<<<")
         } catch (err) {
             console.log(err);
         }
     };
-
+    console.log(allPosts);
     //! Fetch Category Detail
     useEffect(() => {
         (async () => {
@@ -49,15 +53,34 @@ export default function CategoryDetail({ navigation }) {
         })();
     }, [categoryId]);
 
+    //! Fetch All Posts By CategoryId
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data: Posts } = await axios({
+                    method: "GET",
+                    url: `http://${BASE_URL}:3000/posts/${categoryId}`,
+                    headers: {
+                        access_token: await AsyncStorage.getItem("access_token"),
+                    },
+                });
+                setAllPosts(Posts);
+                setLoadingPosts(false);
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, []);
+
     useEffect(() => {
         async function setUser() {
             const userId = await AsyncStorage.getItem("userId");
             const { data } = await axios({
                 method: "GET",
                 url: `http://${BASE_URL}:3001/users/${userId}`,
-                headers : {
-                    access_token : await AsyncStorage.getItem("access_token")
-                }
+                headers: {
+                    access_token: await AsyncStorage.getItem("access_token"),
+                },
             });
 
             setCurrentUser({
@@ -76,7 +99,7 @@ export default function CategoryDetail({ navigation }) {
                 const unsubscribe = onSnapshot(doc(db, "users", await AsyncStorage.getItem("userId")), async (doc) => {
                     const user = doc.data();
                     const userId = await AsyncStorage.getItem("userId");
-                    const token = await AsyncStorage.getItem("access_token")
+                    const token = await AsyncStorage.getItem("access_token");
                     if (user.isFindMatch) {
                         const { data: allRooms } = await axios({
                             method: "GET",
@@ -111,9 +134,9 @@ export default function CategoryDetail({ navigation }) {
                                 data: {
                                     userId,
                                 },
-                                headers:{
-                                    access_token : token
-                                }
+                                headers: {
+                                    access_token: token,
+                                },
                             });
                             console.log(joinRoom, "player 2 terisi bung");
 
@@ -133,15 +156,21 @@ export default function CategoryDetail({ navigation }) {
                 const newUpdate = await updateDoc(userRef, {
                     isFindMatch: false,
                 });
-                console.log(newUpdate)
-                console.log("masok")
             }
         })();
     }, []);
 
-    console.log(categoryDetail, "ini categoryDetail");
+    //! Add Post
+    const handleAddPost = () => {
+        navigation.navigate("AddPostScreen");
+    };
+
     if (loadingCategoryDetail) {
         return <Text>Masih Loading categoryDetail...</Text>;
+    }
+
+    if (loadingPosts) {
+        return <Text>Masih Loading Posts....</Text>;
     }
 
     return (
@@ -149,7 +178,7 @@ export default function CategoryDetail({ navigation }) {
             <View style={styles.container}>
                 <View style={styles.firstPartContainer}>
                     <View style={styles.categoryName}>
-                        <Text style={styles.textCategoryName}>Mythology</Text>
+                        <Text style={styles.textCategoryName}>{categoryDetail.name}</Text>
                     </View>
                     <View style={styles.imageContainer}>
                         <Image
@@ -166,8 +195,16 @@ export default function CategoryDetail({ navigation }) {
                     </View>
                 </View>
                 <ScrollView style={styles.borderLine}>
-                <Post/>
-                <Post/>
+                    <TouchableOpacity onPress={() => handleAddPost(categoryId)}>
+                        <Text>Add Post</Text>
+                    </TouchableOpacity>
+                    {allPosts.length !== 0 ? (
+                        allPosts.map((el, i) => {
+                            return <Post key={`post ${i}`} />;
+                        })
+                    ) : (
+                        <Text>Not Post available yet...</Text>
+                    )}
                 </ScrollView>
             </View>
         </SafeAreaView>
@@ -230,7 +267,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderTopWidth: 1,
         borderTopColor: "grey",
-        
-      },
- 
+    },
 });

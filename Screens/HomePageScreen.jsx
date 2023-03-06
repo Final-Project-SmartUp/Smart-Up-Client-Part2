@@ -10,6 +10,7 @@ export default function HomePage({ navigation }) {
 
     //! Pindah page ke category Detail yang dipilih
     const handleChooseCategory = (categoryId) => {
+        console.log(categoryId, "<<<");
         navigation.navigate("CategoryDetail", categoryId);
     };
 
@@ -36,6 +37,8 @@ export default function HomePage({ navigation }) {
         return <Text>Masih loading category....</Text>;
     }
 
+    console.log(categories);
+
     return (
         <View style={styles.container}>
             <View style={styles.profileContainer}>
@@ -57,14 +60,18 @@ export default function HomePage({ navigation }) {
                         return (
                             <Pressable key={`categoriess ${i}`} style={styles.categoryBox1} onPress={() => handleChooseCategory(category.id)}>
                                 <Text style={styles.fontText}>{category.name}</Text>
-                                {/* <Image style={styles.icon} source={require("../assets/icons8-mythology-62.png")} /> */}
+                                <Image
+                                    style={styles.icon}
+                                    source={{
+                                        uri: category.imageUrl,
+                                    }}
+                                />
                             </Pressable>
                         );
                     })}
                 </View>
             </ScrollView>
-            </View>
-        
+        </View>
     );
 }
 
@@ -99,13 +106,13 @@ export default function HomePage({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         //  backgroundColor:'red',
-        flex:1,
+        flex: 1,
         // height: "100%",
         padding: 10,
         // width: "100%",
     },
     profileContainer: {
-        flex:1,
+        flex: 1,
         // marginTop: 40,
         // height: "5%",
         // width: "100%",
@@ -131,7 +138,7 @@ const styles = StyleSheet.create({
     header: {
         // height: "5%",
         // marginTop: 20,
-        flex:1
+        flex: 1,
         // backgroundColor:'yellow'
     },
     fontHeader: {
