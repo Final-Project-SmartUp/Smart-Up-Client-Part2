@@ -5,28 +5,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../helpers/ip';
 import { Text } from 'react-native';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 export default function EditProfile({navigation}) {
+    const dispatch = useDispatch()
   const [image, setImage] = useState(null);
 //   const [userData,setUserData] = useState({})
 const [imageData, setImageData] = useState(null);
   const [profileName,setProfileName] = useState("")
   const [loading,setLoading] = useState(true)
   useEffect(()=>{
-    const fetchUser = async()=>{
-        const userId = await AsyncStorage.getItem("userId")
-        try {
-            const {data} = await axios({
-                method:"get",
-                url:`http://${BASE_URL}:3001/users/${userId}`
-            })
-            console.log("masuk")
-            setProfileName(data.profileName)
-            setLoading(false)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-    fetchUser()
+
   },[])
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
