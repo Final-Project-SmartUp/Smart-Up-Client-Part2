@@ -25,6 +25,7 @@ export default function Gamescreen({ route, navigation }) {
     const [isAnswer, setIsAnswer] = useState(false);
     const [player1, setPlayer1] = useState();
     const [player2, setPlayer2] = useState();
+    const [powerUpLimit,setPowerUpLimit] = useState(2);
 
     //! set Timer jalan ketika loading pemain dan loading soal selesai
     useFocusEffect(
@@ -57,15 +58,22 @@ export default function Gamescreen({ route, navigation }) {
     useEffect(() => {
         if (room) {
             (async () => {
+                const token =await AsyncStorage.getItem("access_token")
                 try {
                     const { data: player1 } = await axios({
                         method: "GET",
                         url: `http://${BASE_URL}:3001/users/${room.player1}`,
+                        headers: {
+                            access_token : token
+                        }
                     });
                     console.log("ini jalan ga");
                     const { data: player2 } = await axios({
                         method: "GET",
                         url: `http://${BASE_URL}:3001/users/${room.player2}`,
+                        headers:{
+                            access_token : token
+                        }
                     });
                     setPlayer1(player1.profileName);
                     setPlayer2(player2.profileName);
@@ -155,6 +163,28 @@ export default function Gamescreen({ route, navigation }) {
         }
     };
 
+    const handlePowerUp = async ()=>{
+        if(powerUpLimit > 0){
+            setPowerUpLimit(powerUpLimit - 1)
+            let newOptions = []
+            let  num= 0
+            options.forEach((el)=>{
+                if(questions[counter].correctAnswer === el){
+                    newOptions.push(el)
+                }else {
+                    if(num == 0){
+                        newOptions.push(el)
+                        num++
+                    }
+                }
+            })
+            console.log(newOptions)
+            setOptions(newOptions)
+        }else {
+            
+        }
+        
+    }
     //! loading sebelum game mulai
     if (loading) {
         return <FindMatchScreen />;
@@ -203,6 +233,14 @@ export default function Gamescreen({ route, navigation }) {
                             <View style={styles.questionBox}>
                                 <Text style={styles.question}>{questions[counter].question}</Text>
                             </View>
+                        </View>
+                        <View>
+                           { powerUpLimit > 0 && 
+                           <TouchableOpacity onPress={handlePowerUp}>
+                                <Text>
+                                    POWER UP!!!! count :{powerUpLimit}
+                                </Text>
+                            </TouchableOpacity>}
                         </View>
                         <View style={styles.answerContainer}>
                             {options?.map((option, i) => {

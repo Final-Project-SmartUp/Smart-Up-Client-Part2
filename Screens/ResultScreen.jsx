@@ -22,17 +22,26 @@ export default function ResultScreen({ route }) {
                 const { data: roomData } = await axios({
                     method: "GET",
                     url: `http://${BASE_URL}:3001/rooms/${roomId}`,
+                    headers : {
+                        access_token : await AsyncStorage.getItem("access_token")
+                    }
                 });
                 console.log(roomData, "ini room data");
 
                 const { data: player1 } = await axios({
                     method: "GET",
                     url: `http://${BASE_URL}:3001/users/${roomData.player1}`,
+                    headers : {
+                        access_token : await AsyncStorage.getItem("access_token")
+                    }
                 });
 
                 const { data: player2 } = await axios({
                     method: "GET",
                     url: `http://${BASE_URL}:3001/users/${roomData.player2}`,
+                    headers : {
+                        access_token : await AsyncStorage.getItem("access_token")
+                    }
                 });
 
                 if (roomData.player1 === (await AsyncStorage.getItem("userId"))) {

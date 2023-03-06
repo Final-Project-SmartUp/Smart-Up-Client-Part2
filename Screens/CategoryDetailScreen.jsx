@@ -24,9 +24,10 @@ export default function CategoryDetail({ navigation, route }) {
     const playGame = async () => {
         try {
             const userRef = doc(db, "users", await AsyncStorage.getItem("userId"));
-            await updateDoc(userRef, {
+            const newUpdate = await updateDoc(userRef, {
                 isFindMatch: true,
             });
+            console.log(newUpdate,"<<<<<<<<<")
         } catch (err) {
             console.log(err);
         }
@@ -58,6 +59,9 @@ export default function CategoryDetail({ navigation, route }) {
             const { data } = await axios({
                 method: "GET",
                 url: `http://${BASE_URL}:3001/users/${userId}`,
+                headers : {
+                    access_token : await AsyncStorage.getItem("access_token")
+                }
             });
 
             setCurrentUser({
@@ -76,6 +80,7 @@ export default function CategoryDetail({ navigation, route }) {
                 const unsubscribe = onSnapshot(doc(db, "users", await AsyncStorage.getItem("userId")), async (doc) => {
                     const user = doc.data();
                     const userId = await AsyncStorage.getItem("userId");
+                    const token = await AsyncStorage.getItem("access_token")
                     if (user.isFindMatch) {
                         const { data: allRooms } = await axios({
                             method: "GET",
@@ -110,6 +115,9 @@ export default function CategoryDetail({ navigation, route }) {
                                 data: {
                                     userId,
                                 },
+                                headers:{
+                                    access_token : token
+                                }
                             });
                             console.log(joinRoom, "player 2 terisi bung");
 
@@ -126,9 +134,11 @@ export default function CategoryDetail({ navigation, route }) {
                 console.log(err);
             } finally {
                 const userRef = doc(db, "users", await AsyncStorage.getItem("userId"));
-                await updateDoc(userRef, {
+                const newUpdate = await updateDoc(userRef, {
                     isFindMatch: false,
                 });
+                console.log(newUpdate)
+                console.log("masok")
             }
         })();
     }, []);
