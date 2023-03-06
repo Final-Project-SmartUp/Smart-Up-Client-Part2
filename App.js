@@ -9,7 +9,8 @@ import LoginPage from "./Screens/LoginScreen";
 import CategoryDetail from "./Screens/CategoryDetailScreen";
 import Gamescreen from "./Screens/GameScreen";
 import ResultScreen from "./Screens/ResultScreen";
-import HomePage from "./Screens/HomePageScreen";
+import LoginPage from "./Screens/LoginScreen";
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,7 +45,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
     return (
         <Provider store={store}>
-            <NavigationContainer>
+            {/* <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
                     {/* <Stack.Screen name="Register" component={Register} options={{ headerTitle: "" }} /> */}
@@ -54,7 +55,8 @@ export default function App() {
                     {/* <Stack.Screen name="Gamescreen" component={Gamescreen} /> */}
                     {/* <Stack.Screen name="ResultScreen" component={ResultScreen} /> */}
                 </Stack.Navigator>
-            </NavigationContainer>
+            </NavigationContainer> */}
+            <ProfilePage/>
         </Provider>
     );
 }
