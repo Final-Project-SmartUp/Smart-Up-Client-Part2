@@ -2,34 +2,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { StyleSheet, View, Image, Text, ScrollView, TouchableOpacity } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../helpers/ip";
+import { fetchUser } from "../stores/actions/actionCreator";
 
 
 
 
 const ProfilePage = ({navigation}) => {
-
-  const [userData,setUserData] = useState({})
-  const [fetchUserLoading,setFetchUserLoading] = useState(true)
+  const dispatch = useDispatch()
+  const {user:userData,loading} = useSelector((state)=>{
+    return state.user
+  })
   useEffect(()=>{
-    const fetchUser = async()=>{
-      try {
-        const userId = await AsyncStorage.getItem("userId")
-        const {data:userData} = await axios({
-          method:'get',
-          url:`http://${BASE_URL}:3001/users/${userId}`
-        })
-        setUserData(userData)
-        setFetchUserLoading(false)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    fetchUser()
+    dispatch(fetchUser())
   },[])
 
 
-  if(fetchUserLoading){
+  if(loading){
     return (
       <View>
         <Text>
