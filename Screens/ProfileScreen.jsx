@@ -1,31 +1,68 @@
-import React from "react";
-import { StyleSheet, View, Image, Text, ScrollView } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { StyleSheet, View, Image, Text, ScrollView, TouchableOpacity } from "react-native";
+import { BASE_URL } from "../helpers/ip";
 
-const ProfilePage = () => {
+
+
+
+const ProfilePage = ({navigation}) => {
+
+  const [userData,setUserData] = useState({})
+  const [fetchUserLoading,setFetchUserLoading] = useState(true)
+  useEffect(()=>{
+    const fetchUser = async()=>{
+      try {
+        const userId = await AsyncStorage.getItem("userId")
+        const {data:userData} = await axios({
+          method:'get',
+          url:`http://${BASE_URL}:3001/users/${userId}`
+        })
+        setUserData(userData)
+        setFetchUserLoading(false)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchUser()
+  },[])
+
+
+  if(fetchUserLoading){
+    return (
+      <View>
+        <Text>
+          Loading...................
+        </Text>
+      </View>
+    )
+  }
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
         <Text style={styles.description}>Profile</Text>
+        <TouchableOpacity onPress={()=>navigation.navigate("EditProfile")}>
+          <Text>
+            EDIT!!!
+          </Text>
+        </TouchableOpacity>
         <Image
           style={styles.profileImage}
           source={{
-            uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+            uri: userData.image,
           }}
         />
-        <Text style={styles.name}>Daffa Sarung</Text>
+        <Text style={styles.name}>{userData?.profileName}</Text>
       </View>
       <View style={styles.stats}>
         <View style={styles.statMmrContainer}>
           <Text style={styles.statRank}>MMR</Text>
-          <Text style={styles.statValue}>100</Text>
+          <Text style={styles.statValue}>{userData?.mmr}</Text>
         </View>
         <View style={styles.statRankContainer}>
           <Text style={styles.statRank}>Rank</Text>
           <Text style={styles.statValue}>50</Text>
-        </View>
-        <View style={styles.statPostContainer}>
-          <Text style={styles.statPost}>Posts</Text>
-          <Text style={styles.statValue}>25</Text>
         </View>
       </View>
       <View style={styles.friendListContainer}>

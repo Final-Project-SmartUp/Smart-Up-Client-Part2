@@ -167,7 +167,7 @@ export default function Gamescreen({ route, navigation }) {
         if(powerUpLimit > 0){
             setPowerUpLimit(powerUpLimit - 1)
             let newOptions = []
-            let  num= 0
+            let num= 0
             options.forEach((el)=>{
                 if(questions[counter].correctAnswer === el){
                     newOptions.push(el)

@@ -11,8 +11,8 @@ import Gamescreen from "./Screens/GameScreen";
 import ResultScreen from "./Screens/ResultScreen";
 import LoginPage from "./Screens/LoginScreen";
 import HomePage from "./Screens/HomePageScreen";
-import ProfilePage from "./Screens/ProfileScreen";
 // import HomePage from "./Screens/HomePageScreen";
+import ProfilePage from "./Screens/ProfileScreen";
 import { SafeAreaView } from "react-native";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,6 +21,7 @@ import AddPost from "./Screens/AddPostScreen";
 import PostDetail from "./Screens/PostDetailScreen";
 import AddCommentScreen from "./Screens/AddCommentScreen";
 
+import EditProfile from "./Screens/EditProfile";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -80,6 +81,7 @@ export default function App() {
                                 {/* <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
 
                                 <Stack.Screen name="Login" component={LoginPage} /> */}
+                                <Stack.Screen name="ProfileScreen" component={ProfilePage}/>
                                 <Stack.Screen name="Home" component={HomePage} />
                                 <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
                                 <Stack.Screen name="PostDetailScreen" component={PostDetail} />
@@ -89,6 +91,7 @@ export default function App() {
                                 {/* <Stack.Screen name="Home" component={ShowTab} options={{ headerShown: false }} /> */}
                                 <Stack.Screen name="Gamescreen" component={Gamescreen} />
                                 <Stack.Screen name="ResultScreen" component={ResultScreen} />
+                                <Stack.Screen name="EditProfile" component={EditProfile}/>
                             </>
                         ) : (
                             <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />

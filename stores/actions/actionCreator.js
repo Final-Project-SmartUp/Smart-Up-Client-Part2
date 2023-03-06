@@ -3,6 +3,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "../../helpers/ip";
 import { FETCH_POSTS_PENDING, FETCH_POSTS_REJECT, FETCH_POSTS_SUCCESS } from "./actionType";
 
+
+
+
+
+
+
+
+
+
 export const login =
     ({ email, password }) =>
     async (dispatch) => {
@@ -25,6 +34,7 @@ export const login =
         }
     };
 
+<<<<<<< HEAD
 const fetchPostsPending = () => ({
     type: FETCH_POSTS_PENDING,
 });
@@ -57,3 +67,5 @@ export const fetchPosts = (categoryId) => {
         }
     };
 };
+=======
+>>>>>>> 3a8d98c (feat:)
