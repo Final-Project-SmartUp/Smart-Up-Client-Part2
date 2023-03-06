@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import store from "./stores";
-import Register from './Screens/RegisterScreen'
+import Register from "./Screens/RegisterScreen";
 import LandingPage from "./Screens/LandingScreen";
 import CategoryDetail from "./Screens/CategoryDetailScreen";
 import Gamescreen from "./Screens/GameScreen";
@@ -12,10 +12,11 @@ import ResultScreen from "./Screens/ResultScreen";
 import LoginPage from "./Screens/LoginScreen";
 import HomePage from "./Screens/HomePageScreen";
 import ProfilePage from "./Screens/ProfileScreen";
-import HomePage from "./Screens/HomePageScreen";
+// import HomePage from "./Screens/HomePageScreen";
 import { SafeAreaView } from "react-native";
-
-
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Text } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,23 +49,46 @@ const Tab = createBottomTabNavigator();
 // };
 
 export default function App() {
+    const [token, setToken] = useState();
+    const [loadingToken, setLoadingToken] = useState(true);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                setToken(await AsyncStorage.getItem("access_token"));
+                setLoadingToken(false);
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    });
+
+    if (loadingToken) {
+        return <Text>Masih loading...</Text>;
+    }
+
     return (
-        <SafeAreaView style={{flex:1}}>
-        <Provider store={store}>
-            <NavigationContainer>
-                <Stack.Navigator>
-                    {/* <Stack.Screen name="HomePage" component={HomePage} /> */}
-                    <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
-                    {/* <Stack.Screen name="Register" component={Register} options={{ headerTitle: "" }} /> */}
-                    <Stack.Screen name="Login" component={LoginPage} />
-                    <Stack.Screen name="Home" component={HomePage} />
-                    <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
-                    {/* <Stack.Screen name="Home" component={ShowTab} options={{ headerShown: false }} /> */}
-                    <Stack.Screen name="Gamescreen" component={Gamescreen} />
-                    <Stack.Screen name="ResultScreen" component={ResultScreen} />
-                </Stack.Navigator>
-            </NavigationContainer>
-        </Provider>
+        <SafeAreaView style={{ flex: 1 }}>
+            <Provider store={store}>
+                <NavigationContainer>
+                    <Stack.Navigator>
+                        {token ? (
+                            <>
+                                {/* <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
+
+                                <Stack.Screen name="Login" component={LoginPage} /> */}
+                                <Stack.Screen name="Home" component={HomePage} />
+                                <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
+                                {/* <Stack.Screen name="Home" component={ShowTab} options={{ headerShown: false }} /> */}
+                                <Stack.Screen name="Gamescreen" component={Gamescreen} />
+                                <Stack.Screen name="ResultScreen" component={ResultScreen} />
+                            </>
+                        ) : (
+                            <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
+                        )}
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </Provider>
         </SafeAreaView>
     );
 }

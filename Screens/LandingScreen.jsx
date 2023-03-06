@@ -13,7 +13,12 @@ const LandingPage = ({ navigation }) => {
             <Pressable style={styles.button1} onPress={() => navigation.navigate("Register")}>
                 <Text style={styles.textButton}>CREATE ACCOUNT</Text>
             </Pressable>
-            <Pressable style={styles.button2} onPress={() => navigation.navigate("Login")}>
+            <Pressable
+                style={styles.button2}
+                onPress={() => {
+                    navigation.navigate("Login");
+                }}
+            >
                 <Text style={styles.textButton}>SIGN IN</Text>
             </Pressable>
         </View>
