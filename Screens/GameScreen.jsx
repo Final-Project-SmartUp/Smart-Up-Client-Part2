@@ -1,15 +1,15 @@
 import { TextInput, View, Button, Text, ScrollView, Pressable, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import FindMatchScreen from "./FindMatchScreen";
+import FoundOpponentScreen from "./FoundOpponentScreen";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import db from "../config/firebaseConnection";
-import FoundOpponentScreen from "./FoundOpponentScreen";
 import { useFocusEffect } from "@react-navigation/native";
-
+import { BASE_URL } from "../helpers/ip";
 export default function Gamescreen({ route, navigation }) {
     const { roomId } = route.params;
     const [room, setRoom] = useState({});
@@ -26,32 +26,32 @@ export default function Gamescreen({ route, navigation }) {
     const [player1, setPlayer1] = useState();
     const [player2, setPlayer2] = useState();
 
-    const BASE_URL = "192.168.9.117";
-
     //! set Timer jalan ketika loading pemain dan loading soal selesai
-    useFocusEffect(() => {
-        if (!loading && !loadingQuestion) {
-            if (time > -1 && counter < 5) {
-                const interval = setInterval(() => {
-                    setTime((prevTime) => {
-                        if (prevTime === 0) {
-                            setCounter((prevCounter) => prevCounter + 1);
-                            setIsAnswer(false);
-                            return time;
-                        } else {
-                            return prevTime - 1;
-                        }
-                    });
-                }, 1000);
+    useFocusEffect(
+        useCallback(() => {
+            if (!loading && !loadingQuestion) {
+                if (time > -1 && counter < 5) {
+                    const interval = setInterval(() => {
+                        setTime((prevTime) => {
+                            if (prevTime === 0) {
+                                setCounter((prevCounter) => prevCounter + 1);
+                                setIsAnswer(false);
+                                return time;
+                            } else {
+                                return prevTime - 1;
+                            }
+                        });
+                    }, 1000);
 
-                if (counter >= 5) {
-                    clearInterval(interval);
+                    if (counter >= 5) {
+                        clearInterval(interval);
+                    }
+
+                    return () => clearInterval(interval);
                 }
-
-                return () => clearInterval(interval);
             }
-        }
-    }, [loading, loadingQuestion]);
+        }, [loading, loadingQuestion])
+    );
     console.log(player1, player2, "ini players");
     //! Query Player 1 and Player 2 in the room
     useEffect(() => {

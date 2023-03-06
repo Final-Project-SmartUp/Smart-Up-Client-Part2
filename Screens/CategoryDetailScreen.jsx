@@ -6,8 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { onSnapshot } from "firebase/firestore";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-
-const BASE_URL = "192.168.9.117";
+import { BASE_URL } from "../helpers/ip";
 
 export default function CategoryDetail({ navigation }) {
     const [currentUser, setCurrentUser] = useState({

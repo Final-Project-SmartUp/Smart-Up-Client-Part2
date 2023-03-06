@@ -5,12 +5,12 @@ export default function HomePage() {
         <View style={styles.container}>
             <View style={styles.profileContainer}>
                 <View style={styles.profile}>
-                    <Image
+                    {/* <Image
                         style={styles.image}
                         source={{
                             uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
                         }}
-                    />
+                    /> */}
                 </View>
             </View>
             <View style={styles.header}>
@@ -20,27 +20,27 @@ export default function HomePage() {
                 <View style={styles.categoryContainer}>
                     <Pressable style={styles.categoryBox1}>
                         <Text style={styles.fontText}>MYTHOLOGY</Text>
-                        <Image style={styles.icon} source={require("../assets/icons8-mythology-62.png")} />
+                        {/* <Image style={styles.icon} source={require("../assets/icons8-mythology-62.png")} /> */}
                     </Pressable>
                     <Pressable style={styles.categoryBox2}>
                         <Text style={styles.fontText}>SCIENCE</Text>
-                        <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} />
+                        {/* <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} /> */}
                     </Pressable>
                     <Pressable style={styles.categoryBox2}>
                         <Text style={styles.fontText}>SCIENCE</Text>
-                        <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} />
+                        {/* <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} /> */}
                     </Pressable>
                     <Pressable style={styles.categoryBox2}>
                         <Text style={styles.fontText}>SCIENCE</Text>
-                        <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} />
+                        {/* <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} /> */}
                     </Pressable>
                     <Pressable style={styles.categoryBox2}>
                         <Text style={styles.fontText}>SCIENCE</Text>
-                        <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} />
+                        {/* <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} /> */}
                     </Pressable>
                     <Pressable style={styles.categoryBox2}>
                         <Text style={styles.fontText}>SCIENCE</Text>
-                        <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} />
+                        {/* <Image style={styles.icon} source={require("../assets/icons8-biotech-48.png")} /> */}
                     </Pressable>
                 </View>
             </ScrollView>

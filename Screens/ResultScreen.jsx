@@ -5,15 +5,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { BASE_URL } from "../helpers/ip";
 
 export default function ResultScreen({ route }) {
     const roomId = route.params;
     const [room, setRoom] = useState({});
     const [player1, setPlayer1] = useState();
     const [player2, setPlayer2] = useState();
-    const BASE_URL = `192.168.9.117`;
+    const [loading, setLoading] = useState(true);
+    const [player1ID, setPlayer1ID] = useState();
+    const [player2ID, setPlayer2ID] = useState();
 
-    console.log(roomId, "<<", room, "ini penting");
     useEffect(() => {
         (async () => {
             try {
@@ -21,30 +23,45 @@ export default function ResultScreen({ route }) {
                     method: "GET",
                     url: `http://${BASE_URL}:3001/rooms/${roomId}`,
                 });
+                console.log(roomData, "ini room data");
 
                 const { data: player1 } = await axios({
                     method: "GET",
-                    url: `http://${BASE_URL}:3001/users/${room.player1}`,
+                    url: `http://${BASE_URL}:3001/users/${roomData.player1}`,
                 });
 
                 const { data: player2 } = await axios({
                     method: "GET",
-                    url: `http://${BASE_URL}:3001/users/${room.player2}`,
+                    url: `http://${BASE_URL}:3001/users/${roomData.player2}`,
                 });
+
+                if (roomData.player1 === (await AsyncStorage.getItem("userId"))) {
+                    setPlayer1ID(await AsyncStorage.getItem("userId"));
+                }
+
+                if (roomData.player2 === (await AsyncStorage.getItem("userId"))) {
+                    setPlayer2ID(await AsyncStorage.getItem("userId"));
+                }
 
                 setRoom(roomData);
                 setPlayer1(player1.profileName);
                 setPlayer2(player2.profileName);
+                setLoading(false);
             } catch (err) {
                 console.log(err);
             }
         })();
     }, []);
+
+    if (loading) {
+        return <Text>Masih Loading</Text>;
+    }
+
     return (
         <SafeAreaView>
             <View style={styles.container}>
                 <View style={styles.result}>
-                    <Text style={styles.resultText}>YOU WIN</Text>
+                    <Text style={styles.resultText}>{player1ID === room.player1 && room.scorePlayer1 > room.scorePlayer2 ? "YOU WIN" : player2ID === room.player2 && room.scorePlayer2 > room.scorePlayer1 ? "YOU WIN" : "YOU LOSE"}</Text>
                 </View>
                 <View style={styles.playersContainer}>
                     <ProfilePicture />
