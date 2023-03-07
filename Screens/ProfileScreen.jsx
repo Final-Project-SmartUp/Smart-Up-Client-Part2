@@ -11,15 +11,34 @@ import { fetchUser } from "../stores/actions/actionCreator";
 
 const ProfilePage = ({navigation}) => {
   const dispatch = useDispatch()
+  const [friendList,setFriendList] = useState([])
+  const [friendListLoading,setFriendListLoading] = useState(true)
   const {user:userData,loading} = useSelector((state)=>{
     return state.user
   })
   useEffect(()=>{
     dispatch(fetchUser())
   },[])
+  useEffect(()=>{
+    (async()=>{
+      try {
+        const {data} = await axios({
+          method:'get',
+          url:`http://${BASE_URL}:3001/friends`,
+          headers:{
+            access_token : await AsyncStorage.getItem("access_token")
+          }
+        })
+        setFriendList(data)
+      } catch (err) {
+        console.log(err)
+      } finally{
+        setFriendListLoading(false)
+      }
 
-
-  if(loading){
+    })()
+  },[])
+  if(loading || friendListLoading){
     return (
       <View>
         <Text>
@@ -111,10 +130,9 @@ const ProfilePage = ({navigation}) => {
                 </View>
               </View>
               <View style={{ width: "57%", marginLeft: 30, marginTop: 10 }}>
-                <Text style={styles.friendListFont}>Willy Chu</Text>
-                <Text style={styles.friendListFont}>Beauty Dominique</Text>
-                <Text style={styles.friendListFont}>Ananta Sophan</Text>
-                <Text style={styles.friendListFont}>Sophia Latjuba</Text>
+                {friendList?.map((el)=>{
+                  return <Text key={el.id} style={styles.friendListFont}>{el.name}</Text>
+                })}
               </View>
             </View>
           </ScrollView>
