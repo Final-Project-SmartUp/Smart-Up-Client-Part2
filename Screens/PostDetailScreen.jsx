@@ -2,38 +2,33 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../helpers/ip";
+import { fetchPost } from "../stores/actions/actionCreator";
 
 export default function PostDetail({ route, navigation }) {
     const postId = route.params;
-    console.log(postId, "ini post Id");
-    const [postWithComments, setPostWithComments] = useState();
-    const [loadingPostDetail, setLoadingPostDetail] = useState(true);
     const [userPost, setUserPost] = useState();
     const [loadingUserPost, setLoadingUserPost] = useState(true);
+    const { fetchPostLoading, post, errorMsg } = useSelector((state) => state.post);
+    const dispatch = useDispatch();
     useEffect(() => {
         (async () => {
             try {
-                const { data: postDetail } = await axios({
-                    method: "GET",
-                    url: `http://${BASE_URL}:3000/posts/postDetail/${postId}`,
-                    headers: {
-                        access_token: await AsyncStorage.getItem("access_token"),
-                    },
-                });
-
                 const { data: user } = await axios({
                     method: "GET",
-                    url: `http://${BASE_URL}:3001/users/${postDetail.UserId}`,
+                    url: `http://${BASE_URL}:3001/users/${post.UserId}`,
                 });
                 setUserPost(user);
-                setPostWithComments(postDetail);
-                setLoadingPostDetail(false);
                 setLoadingUserPost(false);
             } catch (err) {
                 console.log(err);
             }
         })();
+    }, [post]);
+
+    useEffect(() => {
+        dispatch(fetchPost(postId));
     }, []);
 
     const [message, setMessage] = useState();
@@ -42,7 +37,11 @@ export default function PostDetail({ route, navigation }) {
         navigation.navigate("AddCommentScreen", postId);
     };
 
-    if (loadingPostDetail || loadingUserPost) {
+    const handleGoBack = () => {
+        navigation.navigate("CategoryDetail", { categoryId: post.CategoryId });
+    };
+
+    if (loadingUserPost || fetchPostLoading) {
         return <Text>Masih Loading....</Text>;
     }
 
@@ -61,58 +60,46 @@ export default function PostDetail({ route, navigation }) {
                     <Text style={styles.textProfileName}>
                         <Text style={styles.boldStyle}>{userPost.profileName}</Text>
                         <Text> posted in</Text>
-                        <Text style={styles.boldStyle}> {postWithComments.Category.name}</Text>
+                        <Text style={styles.boldStyle}> {post.Category.name}</Text>
                     </Text>
                 </View>
                 <View style={styles.postContainer}>
-                    <Text style={styles.textPost}>{postWithComments.description}</Text>
+                    <Text style={styles.textPost}>{post.description}</Text>
                 </View>
                 <View>
                     <TouchableOpacity onPress={() => handleAddComment()}>
                         <Text>Add Comment</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleGoBack(post.CategoryId)}>
+                        <Text>Go Back</Text>
+                    </TouchableOpacity>
                 </View>
 
-                <View style={styles.profileReplyContainer}>
-                    <View style={styles.profileImageReplyContainer}>
-                        <Image
-                            style={styles.imageReply}
-                            source={{
-                                uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
-                            }}
-                        />
-                    </View>
+                {post.Comments.map((comment, i) => {
+                    return (
+                        <View key={`comment ${i}`} style={styles.profileReplyContainer}>
+                            <View style={styles.profileImageReplyContainer}>
+                                <Image
+                                    style={styles.imageReply}
+                                    source={{
+                                        uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                                    }}
+                                />
+                            </View>
 
-                    <View style={styles.replyContainer}>
-                        <Text style={styles.textProfileNameReply}>Daffa the Boy</Text>
-                        <View style={styles.boxComment}>
-                            <View style={styles.commentContainer}>
-                                <Text style={styles.reply}>Hello anjjhhh </Text>
+                            <View style={styles.replyContainer}>
+                                <Text style={styles.textProfileNameReply}>{comment.profileName}</Text>
+                                <View style={styles.boxComment}>
+                                    <View style={styles.commentContainer}>
+                                        <Text style={styles.reply}>{comment.description}</Text>
+                                    </View>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                </View>
-                <View style={styles.profileReplyContainer}>
-                    <View style={styles.profileImageReplyContainer}>
-                        <Image
-                            style={styles.imageReply}
-                            source={{
-                                uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
-                            }}
-                        />
-                    </View>
+                    );
+                })}
 
-                    <View style={styles.replyContainer}>
-                        <Text style={styles.textProfileNameReply}>Daffa the Boy</Text>
-                        <View style={styles.boxComment}>
-                            <View style={styles.commentContainer}>
-                                <Text style={styles.reply}>Hello anjjhhh </Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.profileReplyContainerNext}>
+                {/* <View style={styles.profileReplyContainerNext}>
                     <View style={styles.profileImageReplyContainerNext}>
                         <Image
                             style={styles.imageReply}
@@ -129,7 +116,7 @@ export default function PostDetail({ route, navigation }) {
                             </View>
                         </View>
                     </View>
-                </View>
+                </View> */}
             </View>
             <View style={styles.postReplyContainer}>
                 <TextInput placeholder="Message" placeholderTextColor="#C0C0C0" editable multiline numberOfLines={4} maxLength={40} value={message} onChangeText={(message) => setMessage(message)} style={styles.textInput} />

@@ -4,12 +4,13 @@ import { useState } from "react";
 import { BASE_URL } from "../helpers/ip";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
+import { fetchPost } from "../stores/actions/actionCreator";
 
 export default function AddCommentScreen({ route, navigation }) {
     const [comment, setComment] = useState();
     const postId = route.params;
+    const dispatch = useDispatch();
     const addComment = async () => {
-        console.log(comment, postId);
         try {
             const { data: newComment } = await axios({
                 method: "POST",
@@ -23,6 +24,7 @@ export default function AddCommentScreen({ route, navigation }) {
                     access_token: await AsyncStorage.getItem("access_token"),
                 },
             });
+            dispatch(fetchPost(postId));
             navigation.navigate("PostDetailScreen");
         } catch (err) {
             console.log(err);

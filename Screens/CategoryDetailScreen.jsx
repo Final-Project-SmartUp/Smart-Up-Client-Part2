@@ -92,7 +92,7 @@ export default function CategoryDetail({ navigation, route }) {
                     if (user.isFindMatch) {
                         const { data: allRooms } = await axios({
                             method: "GET",
-                            url: `http://${BASE_URL}:3001/rooms`,
+                            url: `http://${BASE_URL}:3001/rooms/getRoom/${categoryId}`,
                             headers: {
                                 access_token: await AsyncStorage.getItem("access_token"),
                             },
@@ -104,6 +104,9 @@ export default function CategoryDetail({ navigation, route }) {
                                 url: `http://${BASE_URL}:3001/rooms/createRoom/${userId}`,
                                 headers: {
                                     access_token: await AsyncStorage.getItem("access_token"),
+                                },
+                                data: {
+                                    categoryId: categoryId,
                                 },
                             });
                             console.log(newRoom, "buat room baru");
