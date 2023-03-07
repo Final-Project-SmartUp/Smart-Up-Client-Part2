@@ -1,4 +1,4 @@
-import { TextInput, View, Button, Text, ScrollView, Pressable, Image, TouchableOpacity } from "react-native";
+import { TextInput, View, Button, Text, ScrollView, Pressable, Image, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native";
 import { useCallback, useEffect, useState } from "react";
@@ -10,8 +10,9 @@ import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import db from "../config/firebaseConnection";
 import { useFocusEffect } from "@react-navigation/native";
 import { BASE_URL } from "../helpers/ip";
+import Loading from "../Components/Loading";
 export default function Gamescreen({ route, navigation }) {
-    const { roomId, categoryValue } = route.params;
+    const { roomId } = route.params;
     const [room, setRoom] = useState({});
     const [questions, setQuestions] = useState([]);
     const [time, setTime] = useState(10);
@@ -25,7 +26,8 @@ export default function Gamescreen({ route, navigation }) {
     const [isAnswer, setIsAnswer] = useState(false);
     const [player1, setPlayer1] = useState();
     const [player2, setPlayer2] = useState();
-    const [powerUpLimit,setPowerUpLimit] = useState(2);
+    const [powerUpLimit, setPowerUpLimit] = useState(2);
+    const [isFocused, setIsFocused] = useState(false);
 
     //! set Timer jalan ketika loading pemain dan loading soal selesai
     useFocusEffect(
@@ -53,43 +55,42 @@ export default function Gamescreen({ route, navigation }) {
             }
         }, [loading, loadingQuestion])
     );
-    console.log(player1, player2, "ini players");
+
     //! Query Player 1 and Player 2 in the room
     useEffect(() => {
         if (room) {
             (async () => {
-                const token =await AsyncStorage.getItem("access_token")
+                const token = await AsyncStorage.getItem("access_token");
                 try {
                     const { data: player1 } = await axios({
                         method: "GET",
                         url: `http://${BASE_URL}:3001/users/${room.player1}`,
                         headers: {
-                            access_token : token
-                        }
+                            access_token: token,
+                        },
                     });
-                    console.log("ini jalan ga");
                     const { data: player2 } = await axios({
                         method: "GET",
                         url: `http://${BASE_URL}:3001/users/${room.player2}`,
-                        headers:{
-                            access_token : token
-                        }
+                        headers: {
+                            access_token: token,
+                        },
                     });
-                    setPlayer1(player1.profileName);
-                    setPlayer2(player2.profileName);
+                    setPlayer1(player1);
+                    setPlayer2(player2);
                 } catch (err) {
                     console.log(err);
                 }
             })();
         }
     }, [room.player2]);
-    console.log(counter, "ini counter");
+
     //! Acak Jawaban
     useEffect(() => {
         if (questions.length !== 0) {
             if (counter < 5) {
                 setOptions(handleShuffle([questions[counter]?.correctAnswer, ...questions[counter]?.incorrectAnswers]));
-            } else {
+            } else if (counter === 5) {
                 navigation.navigate("ResultScreen", roomId);
             }
         }
@@ -102,7 +103,7 @@ export default function Gamescreen({ route, navigation }) {
                 try {
                     const { data: questions } = await axios({
                         method: "GET",
-                        url: `http://${BASE_URL}:3000/questions/${categoryValue}`,
+                        url: `http://${BASE_URL}:3000/questions/${room.category + 8}`,
                         headers: {
                             access_token: await AsyncStorage.getItem("access_token"),
                         },
@@ -146,6 +147,7 @@ export default function Gamescreen({ route, navigation }) {
     const handleCheck = async (option) => {
         setSelected(option);
         setIsAnswer(true);
+        setIsFocused(true);
         if (option === questions[counter]?.correctAnswer) {
             if (room?.player1 === (await AsyncStorage.getItem("userId"))) {
                 setScorePlayer1(scorePlayer1 + 1);
@@ -163,35 +165,33 @@ export default function Gamescreen({ route, navigation }) {
         }
     };
 
-    const handlePowerUp = async ()=>{
-        if(powerUpLimit > 0){
-            setPowerUpLimit(powerUpLimit - 1)
-            let newOptions = []
-            let num= 0
-            options.forEach((el)=>{
-                if(questions[counter].correctAnswer === el){
-                    newOptions.push(el)
-                }else {
-                    if(num == 0){
-                        newOptions.push(el)
-                        num++
+    const handlePowerUp = async () => {
+        if (powerUpLimit > 0) {
+            setPowerUpLimit(powerUpLimit - 1);
+            let newOptions = [];
+            let num = 0;
+            options.forEach((el) => {
+                if (questions[counter].correctAnswer === el) {
+                    newOptions.push(el);
+                } else {
+                    if (num == 0) {
+                        newOptions.push(el);
+                        num++;
                     }
                 }
-            })
-            console.log(newOptions)
-            setOptions(newOptions)
-        }else {
-            
+            });
+
+            setOptions(newOptions);
+        } else {
         }
-        
-    }
+    };
     //! loading sebelum game mulai
     if (loading) {
         return <FindMatchScreen />;
     }
 
     if (loadingQuestion) {
-        return <FoundOpponentScreen />;
+        return <FoundOpponentScreen roomId={roomId} />;
     }
 
     return (
@@ -206,7 +206,7 @@ export default function Gamescreen({ route, navigation }) {
                             }}
                         />
                         <View style={styles.textScoreContainer}>
-                            <Text>{player1}</Text>
+                            <Text>{player1.profileName}</Text>
                             <Text>{room?.scorePlayer1}</Text>
                         </View>
                     </View>
@@ -216,7 +216,7 @@ export default function Gamescreen({ route, navigation }) {
                     </View>
                     <View style={styles.profileScoreLeftContainer}>
                         <View style={styles.profileScoreLeft}>
-                            <Text>{player2}</Text>
+                            <Text>{player2.profileName}</Text>
                             <Text>{room?.scorePlayer2}</Text>
                         </View>
                         <Image
@@ -227,6 +227,22 @@ export default function Gamescreen({ route, navigation }) {
                         />
                     </View>
                 </View>
+                <View style={styles.helper}>
+                    <View style={styles.gemContainer}>
+                        <View style={styles.iconContainer}>
+                            <Image style={styles.iconGem} source={require("../assets/icons8-sparkling-diamond-100.png")} />
+                        </View>
+                        <View>
+                            <Text>300</Text>
+                        </View>
+                    </View>
+                    <View style={styles.gemContainer}>
+                        <TouchableOpacity style={styles.iconContainer}>
+                            <Image style={styles.iconPowerUp} source={require("../assets/power.png")} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
                 {counter < 5 ? (
                     <>
                         <View style={styles.questionBoxContainer}>
@@ -235,21 +251,20 @@ export default function Gamescreen({ route, navigation }) {
                             </View>
                         </View>
                         <View>
-                           { powerUpLimit > 0 && 
-                           <TouchableOpacity onPress={handlePowerUp}>
-                                <Text>
-                                    POWER UP!!!! count :{powerUpLimit}
-                                </Text>
-                            </TouchableOpacity>}
+                            {powerUpLimit > 0 && (
+                                <TouchableOpacity onPress={handlePowerUp}>
+                                    <Text>POWER UP!!!! count :{powerUpLimit}</Text>
+                                </TouchableOpacity>
+                            )}
                         </View>
                         <View style={styles.answerContainer}>
                             {options?.map((option, i) => {
                                 return isAnswer ? (
-                                    <TouchableOpacity key={`answered ${i}`} style={styles.answerA} onPress={() => handleCheck(option)} disabled={true}>
-                                        <Text style={styles.textAnswer}>{option}</Text>
+                                    <TouchableOpacity key={`answered ${i}`} style={[styles.answerA, isFocused && styles.focusedButton]} onPress={() => handleCheck(option)} disabled={true}>
+                                        <Text style={[styles.textAnswer]}>{option}</Text>
                                     </TouchableOpacity>
                                 ) : (
-                                    <TouchableOpacity key={`answeredd ${i}`} style={styles.answerA} onPress={() => handleCheck(option)}>
+                                    <TouchableOpacity key={`answeredd ${i}`} style={[styles.answerA, isFocused && styles.focusedButton]} onPress={() => handleCheck(option)}>
                                         <Text style={styles.textAnswer}>{option}</Text>
                                     </TouchableOpacity>
                                 );
@@ -263,6 +278,9 @@ export default function Gamescreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+    focusedButton: {
+        backgroundColor: "green",
+    },
     container: {
         backgroundColor: "#F6F8FF",
     },
@@ -375,5 +393,38 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: "white",
         fontWeight: "bold",
+    },
+    helper: {
+        width: "100%",
+        height: "10%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    gemContainer: {
+        width: "30%",
+        height: "100%",
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        // backgroundColor:'white'
+    },
+    iconContainer: {
+        width: "30%",
+        height: "60%",
+        justifyContent: "center",
+        alignItems: "center",
+        marginRight: 5,
+    },
+    iconGem: {
+        width: "70%",
+        height: "70%",
+        borderRadius: 100,
+    },
+    iconPowerUp: {
+        width: "110%",
+        height: "90%",
+        borderRadius: 100,
+        marginLeft: 40,
     },
 });
