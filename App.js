@@ -22,6 +22,8 @@ import PostDetail from "./Screens/PostDetailScreen";
 import AddCommentScreen from "./Screens/AddCommentScreen";
 
 import EditProfile from "./Screens/EditProfile";
+import Payment from "./Screens/PaymentScreen";
+import HandlePayment from "./Screens/HandlePayment";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -78,20 +80,21 @@ export default function App() {
                     <Stack.Navigator>
                         {token ? (
                             <>
-                                {/* <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
+                                {/* <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} /> */}
 
-                                <Stack.Screen name="Login" component={LoginPage} /> */}
+                                <Stack.Screen name="PaymentScreen" component={Payment} />
+                                <Stack.Screen name="Login" component={LoginPage} />
                                 <Stack.Screen name="ProfileScreen" component={ProfilePage}/>
                                 <Stack.Screen name="Home" component={HomePage} />
                                 <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
                                 <Stack.Screen name="PostDetailScreen" component={PostDetail} />
                                 <Stack.Screen name="AddPostScreen" component={AddPost} />
-
                                 <Stack.Screen name="AddCommentScreen" component={AddCommentScreen} />
                                 {/* <Stack.Screen name="Home" component={ShowTab} options={{ headerShown: false }} /> */}
                                 <Stack.Screen name="Gamescreen" component={Gamescreen} />
                                 <Stack.Screen name="ResultScreen" component={ResultScreen} />
                                 <Stack.Screen name="EditProfile" component={EditProfile}/>
+                                <Stack.Screen name="HandlePayment" component={HandlePayment}/>
                             </>
                         ) : (
                             <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />

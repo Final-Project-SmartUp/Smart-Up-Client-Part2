@@ -28,6 +28,7 @@ export default function EditProfile({ navigation }) {
     }, [])
     useEffect(() => {
         setProfileName(user?.profileName)
+        setImage(user?.image)
     }, [])
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -41,7 +42,7 @@ export default function EditProfile({ navigation }) {
             const uri = result.assets[0].uri
             const filename = uri.split("/").pop()
             const formData = new FormData()
-            formData.append("image", {
+            formData.append("image", {  
                 uri,
                 name: filename,
                 type: "image/jpeg",

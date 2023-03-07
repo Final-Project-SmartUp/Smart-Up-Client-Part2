@@ -13,6 +13,8 @@ const ProfilePage = ({navigation}) => {
   const dispatch = useDispatch()
   const [friendList,setFriendList] = useState([])
   const [friendListLoading,setFriendListLoading] = useState(true)
+  const [rankLoading,setRankLoading] = useState(true)
+  const [rank,setRank] = useState("NaN")
   const {user:userData,loading} = useSelector((state)=>{
     return state.user
   })
@@ -38,7 +40,33 @@ const ProfilePage = ({navigation}) => {
 
     })()
   },[])
-  if(loading || friendListLoading){
+
+  useEffect(()=>{
+    const fetchLeaderBoard = async()=>{
+      const token = await AsyncStorage.getItem("access_token")
+      const userId = await AsyncStorage.getItem("userId")
+      try {
+        const {data} = await axios({
+          method:'get',
+          url:`http://${BASE_URL}:3001/users/leaderboard`,
+          headers:{
+            access_token: token
+          }
+        })
+        data.forEach((el,i)=>{
+          console.log(el)
+            if(el.id === userId){
+              setRank(i+1)
+            }
+        })
+        setRankLoading(false)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchLeaderBoard()
+  },[])
+  if(loading || friendListLoading || rankLoading){
     return (
       <View>
         <Text>
@@ -71,7 +99,7 @@ const ProfilePage = ({navigation}) => {
         </View>
         <View style={styles.statRankContainer}>
           <Text style={styles.statRank}>Rank</Text>
-          <Text style={styles.statValue}>50</Text>
+          <Text style={styles.statValue}>{rank}</Text>
         </View>
       </View>
       <View style={styles.friendListContainer}>
@@ -80,46 +108,6 @@ const ProfilePage = ({navigation}) => {
           <ScrollView Vertical style={{ height: "auto" }}>
             <View style={styles.categoryContainer}>
               <View style={{ width: "15%" }}>
-                <View style={styles.categoryBox2}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
-                    }}
-                  />
-                </View>
-                <View style={styles.categoryBox2}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
-                    }}
-                  />
-                </View>
-                <View style={styles.categoryBox2}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
-                    }}
-                  />
-                </View>
-                <View style={styles.categoryBox2}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
-                    }}
-                  />
-                </View>
-                <View style={styles.categoryBox2}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
-                    }}
-                  />
-                </View>
                 <View style={styles.categoryBox2}>
                   <Image
                     style={styles.image}
