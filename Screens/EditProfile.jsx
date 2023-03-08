@@ -38,6 +38,8 @@ export default function EditProfile({ navigation }) {
         if (!result.canceled) {
             const uri = result.assets[0].uri;
             const filename = uri.split("/").pop();
+            console.log(uri)
+            console.log(filename,"<<<<<<")
             const formData = new FormData();
             formData.append("image", {
                 uri,
