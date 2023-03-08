@@ -9,96 +9,78 @@ import FriendList from "../Components/FriendList";
 import { FlatList } from "react-native";
 import Loading from "../Components/Loading";
 
-const ProfilePage = ({ navigation }) => {
-    const dispatch = useDispatch();
-    const [friendList, setFriendList] = useState([]);
-    const [friendListLoading, setFriendListLoading] = useState(true);
-    const { user: userData, loading } = useSelector((state) => {
-        return state.user;
-    });
 
-    const handleGoToEditPage = () => {
-        navigation.navigate("EditProfile");
-    };
 
-    useEffect(() => {
-        dispatch(fetchUser());
-    }, []);
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const { data } = await axios({
-                    method: "get",
-                    url: `http://${BASE_URL}:3001/friends`,
-                    headers: {
-                        access_token: await AsyncStorage.getItem("access_token"),
-                    },
-                });
-                setFriendList(data);
-            } catch (err) {
-                console.log(err);
-            } finally {
-                setFriendListLoading(false);
+
+const ProfilePage = ({navigation}) => {
+  const dispatch = useDispatch()
+  const [friendList,setFriendList] = useState([])
+  const [friendListLoading,setFriendListLoading] = useState(true)
+  const [rankLoading,setRankLoading] = useState(true)
+  const [rank,setRank] = useState("NaN")
+  const {user:userData,loading} = useSelector((state)=>{
+    return state.user
+  })
+  useEffect(()=>{
+    dispatch(fetchUser())
+  },[])
+  useEffect(()=>{
+    (async()=>{
+      try {
+        const {data} = await axios({
+          method:'get',
+          url:`http://${BASE_URL}:3001/friends`,
+          headers:{
+            access_token : await AsyncStorage.getItem("access_token")
+          }
+        })
+        setFriendList(data)
+      } catch (err) {
+        console.log(err)
+      } finally{
+        setFriendListLoading(false)
+      }
+
+    })()
+  },[])
+
+  useEffect(()=>{
+    const fetchLeaderBoard = async()=>{
+      const token = await AsyncStorage.getItem("access_token")
+      const userId = await AsyncStorage.getItem("userId")
+      try {
+        const {data} = await axios({
+          method:'get',
+          url:`http://${BASE_URL}:3001/users/leaderboard`,
+          headers:{
+            access_token: token
+          }
+        })
+        data.forEach((el,i)=>{
+          console.log(el)
+            if(el.id === userId){
+              setRank(i+1)
             }
-        })();
-    }, []);
-    if (loading || friendListLoading) {
-        return <Loading />;
+        })
+        setRankLoading(false)
+      } catch (err) {
+        console.log(err)
+      }
     }
+    fetchLeaderBoard()
+  },[])
+  if(loading || friendListLoading || rankLoading){
+    return (
+      <View>
+        <Text>
+          Loading...................
+        </Text>
+      </View>
+    )
+  }
 
-    const DATA = [
-        {
-            id: "1",
-            title: "Beauty",
-            rrm: 300,
-        },
-        {
-            id: "2",
-            title: "Willy Chu",
-            rrm: 300,
-        },
-        {
-            id: "3",
-            title: "Hello",
-            rrm: 300,
-        },
-        {
-            id: "4",
-            title: "Second Item",
-            rrm: 300,
-        },
-        {
-            id: "5",
-            title: "Third Item",
-            rrm: 300,
-        },
-        {
-            id: "6",
-            title: "Second Item",
-            rrm: 300,
-        },
-        {
-            id: "7",
-            title: "Third Item",
-            rrm: 300,
-        },
-        {
-            id: "8",
-            title: "Second Item",
-            rrm: 300,
-        },
-        {
-            id: "9",
-            title: "Third Item",
-            rrm: 300,
-        },
-        {
-            id: "10",
-            title: "Third Item",
-            rrm: 300,
-        },
-    ];
+
     const Item = ({ title }) => (
         <View style={styles.item}>
             <Text style={styles.title}>{title}</Text>

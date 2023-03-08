@@ -21,8 +21,7 @@ export default function Leaderboard() {
                     });
                     setListofPlayer(leaderboard);
                 });
-
-                return () => unsubscribe();
+                return () => unsubscribe()
             } catch (err) {
                 console.log(err);
             }

@@ -20,8 +20,9 @@ export default function EditProfile({ navigation }) {
         dispatch(fetchUser());
     }, []);
     useEffect(() => {
-        setProfileName(user?.profileName);
-    }, []);
+        setProfileName(user?.profileName)
+        setImage(user?.image)
+    }, [])
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,

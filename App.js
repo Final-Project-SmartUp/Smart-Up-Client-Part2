@@ -22,6 +22,8 @@ import AddCommentScreen from "./Screens/AddCommentScreen";
 import Leaderboard from "./Screens/LeaderboardScreen";
 import EditProfile from "./Screens/EditProfile";
 import FriendRequestScreen from "./Screens/FriendRequestScreen";
+import Payment from "./Screens/PaymentScreen";
+import HandlePayment from "./Screens/HandlePayment";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -90,7 +92,6 @@ export default function App() {
                                 <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
                                 <Stack.Screen name="PostDetailScreen" component={PostDetail} options={{ headerShown: false }} />
                                 <Stack.Screen name="AddPostScreen" component={AddPost} />
-
                                 <Stack.Screen name="AddCommentScreen" component={AddCommentScreen} />
                                 <Stack.Screen name="Gamescreen" component={Gamescreen} />
                                 <Stack.Screen name="ResultScreen" component={ResultScreen} />
