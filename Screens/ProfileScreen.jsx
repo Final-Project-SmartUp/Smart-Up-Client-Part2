@@ -111,7 +111,7 @@ const ProfilePage = ({navigation}) => {
                 </View>
                 <View style={styles.statRankContainer}>
                     <Text style={styles.statRank}>Rank</Text>
-                    <Text style={styles.statValue}>50</Text>
+                    <Text style={styles.statValue}>{rank}</Text>
                 </View>
                 {/* <View style={styles.statPostContainer}>
                     <Text style={styles.statPost}>Posts</Text>
