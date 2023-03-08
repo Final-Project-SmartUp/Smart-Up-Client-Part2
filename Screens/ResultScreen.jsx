@@ -2,12 +2,16 @@ import { TextInput, View, Button, Text, ScrollView, Pressable, Image } from "rea
 import { StyleSheet } from "react-native";
 import ProfilePicture from "../Components/ProfilePicture";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { BASE_URL } from "../helpers/ip";
+import Loading from "../Components/Loading";
+import { doc, updateDoc } from "@firebase/firestore";
+import db from "../config/firebaseConnection";
+import { useFocusEffect } from "@react-navigation/core";
 
-export default function ResultScreen({ route }) {
+export default function ResultScreen({ route, navigation }) {
     const roomId = route.params;
     const [room, setRoom] = useState({});
     const [player1, setPlayer1] = useState();
@@ -15,55 +19,177 @@ export default function ResultScreen({ route }) {
     const [loading, setLoading] = useState(true);
     const [player1ID, setPlayer1ID] = useState();
     const [player2ID, setPlayer2ID] = useState();
+    const [mmrPlayer1, setMmrPlayer1] = useState();
+    const [mmrPlayer2, setMmrPlayer2] = useState();
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const { data: roomData } = await axios({
-                    method: "GET",
-                    url: `http://${BASE_URL}:3001/rooms/${roomId}`,
-                    headers : {
-                        access_token : await AsyncStorage.getItem("access_token")
+    const handleBackToHome = async () => {
+        try {
+            navigation.navigate("Home");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            (async () => {
+                try {
+                    const { data: roomData } = await axios({
+                        method: "GET",
+                        url: `http://${BASE_URL}:3001/rooms/${roomId}`,
+                        headers: {
+                            access_token: await AsyncStorage.getItem("access_token"),
+                        },
+                    });
+                    console.log(roomData, "ini room data");
+
+                    const { data: player1 } = await axios({
+                        method: "GET",
+                        url: `http://${BASE_URL}:3001/users/${roomData.player1}`,
+                        headers: {
+                            access_token: await AsyncStorage.getItem("access_token"),
+                        },
+                    });
+
+                    const { data: player2 } = await axios({
+                        method: "GET",
+                        url: `http://${BASE_URL}:3001/users/${roomData.player2}`,
+                        headers: {
+                            access_token: await AsyncStorage.getItem("access_token"),
+                        },
+                    });
+
+                    if (roomData.player1 === (await AsyncStorage.getItem("userId"))) {
+                        setPlayer1ID(await AsyncStorage.getItem("userId"));
                     }
-                });
-                console.log(roomData, "ini room data");
 
-                const { data: player1 } = await axios({
-                    method: "GET",
-                    url: `http://${BASE_URL}:3001/users/${roomData.player1}`,
-                    headers : {
-                        access_token : await AsyncStorage.getItem("access_token")
+                    if (roomData.player2 === (await AsyncStorage.getItem("userId"))) {
+                        setPlayer2ID(await AsyncStorage.getItem("userId"));
                     }
-                });
 
-                const { data: player2 } = await axios({
-                    method: "GET",
-                    url: `http://${BASE_URL}:3001/users/${roomData.player2}`,
-                    headers : {
-                        access_token : await AsyncStorage.getItem("access_token")
+                    setRoom(roomData);
+
+                    const userRef = doc(db, "users", await AsyncStorage.getItem("userId"));
+                    await updateDoc(userRef, {
+                        isFindMatch: false,
+                    });
+
+                    const roomRef = doc(db, "rooms", roomData.id);
+                    await updateDoc(roomRef, {
+                        isEnded: true,
+                    });
+
+                    if (roomData.scorePlayer1 > roomData.scorePlayer2) {
+                        const userRef1 = doc(db, "users", roomData.player1);
+                        const userRef2 = doc(db, "users", roomData.player2);
+                        await updateDoc(userRef1, {
+                            mmr: player1.mmr + 12.5,
+                        });
+                        await updateDoc(userRef2, {
+                            mmr: player2.mmr - 12.5,
+                        });
+                    } else if (roomData.scorePlayer2 > roomData.scorePlayer1) {
+                        const userRef1 = doc(db, "users", roomData.player1);
+                        const userRef2 = doc(db, "users", roomData.player2);
+                        await updateDoc(userRef2, {
+                            mmr: player2.mmr + 12.5,
+                        });
+                        await updateDoc(userRef1, {
+                            mmr: player1.mmr - 12.5,
+                        });
                     }
-                });
 
-                if (roomData.player1 === (await AsyncStorage.getItem("userId"))) {
-                    setPlayer1ID(await AsyncStorage.getItem("userId"));
+                    setPlayer1(player1.profileName);
+                    setPlayer2(player2.profileName);
+                    setMmrPlayer1(player1.mmr);
+                    setMmrPlayer2(player2.mmr);
+                    setLoading(false);
+                } catch (err) {
+                    console.log(err);
                 }
+            })();
+        }, [])
+    );
 
-                if (roomData.player2 === (await AsyncStorage.getItem("userId"))) {
-                    setPlayer2ID(await AsyncStorage.getItem("userId"));
-                }
+    // useEffect(() => {
+    //     (async () => {
+    //         try {
+    //             const { data: roomData } = await axios({
+    //                 method: "GET",
+    //                 url: `http://${BASE_URL}:3001/rooms/${roomId}`,
+    //                 headers: {
+    //                     access_token: await AsyncStorage.getItem("access_token"),
+    //                 },
+    //             });
+    //             console.log(roomData, "ini room data");
 
-                setRoom(roomData);
-                setPlayer1(player1.profileName);
-                setPlayer2(player2.profileName);
-                setLoading(false);
-            } catch (err) {
-                console.log(err);
-            }
-        })();
-    }, []);
+    //             const { data: player1 } = await axios({
+    //                 method: "GET",
+    //                 url: `http://${BASE_URL}:3001/users/${roomData.player1}`,
+    //                 headers: {
+    //                     access_token: await AsyncStorage.getItem("access_token"),
+    //                 },
+    //             });
+
+    //             const { data: player2 } = await axios({
+    //                 method: "GET",
+    //                 url: `http://${BASE_URL}:3001/users/${roomData.player2}`,
+    //                 headers: {
+    //                     access_token: await AsyncStorage.getItem("access_token"),
+    //                 },
+    //             });
+
+    //             if (roomData.player1 === (await AsyncStorage.getItem("userId"))) {
+    //                 setPlayer1ID(await AsyncStorage.getItem("userId"));
+    //             }
+
+    //             if (roomData.player2 === (await AsyncStorage.getItem("userId"))) {
+    //                 setPlayer2ID(await AsyncStorage.getItem("userId"));
+    //             }
+
+    //             setRoom(roomData);
+
+    //             const userRef = doc(db, "users", await AsyncStorage.getItem("userId"));
+    //             await updateDoc(userRef, {
+    //                 isFindMatch: false,
+    //             });
+
+    //             const roomRef = doc(db, "rooms", roomData.id);
+    //             await updateDoc(roomRef, {
+    //                 isEnded: true,
+    //             });
+
+    //             if (room.scorePlayer1 > room.scorePlayer2) {
+    //                 const userRef1 = doc(db, "users", roomData.player1);
+    //                 const userRef2 = doc(db, "users", roomData.player2);
+    //                 await updateDoc(userRef1, {
+    //                     mmr: player1.mmr + 25,
+    //                 });
+    //                 await updateDoc(userRef2, {
+    //                     mmr: player2.mmr - 25,
+    //                 });
+    //             } else if (room.scorePlayer2 > room.scorePlayer1) {
+    //                 const userRef1 = doc(db, "users", roomData.player1);
+    //                 const userRef2 = doc(db, "users", roomData.player2);
+    //                 await updateDoc(userRef2, {
+    //                     mmr: player2.mmr + 25,
+    //                 });
+    //                 await updateDoc(userRef1, {
+    //                     mmr: player1.mmr - 25,
+    //                 });
+    //             }
+
+    //             setPlayer1(player1.profileName);
+    //             setPlayer2(player2.profileName);
+    //             setLoading(false);
+    //         } catch (err) {
+    //             console.log(err);
+    //         }
+    //     })();
+    // }, []);
 
     if (loading) {
-        return <Text>Masih Loading</Text>;
+        return <Loading />;
     }
 
     return (
@@ -73,17 +199,27 @@ export default function ResultScreen({ route }) {
                     <Text style={styles.resultText}>{player1ID === room.player1 && room.scorePlayer1 > room.scorePlayer2 ? "YOU WIN" : player2ID === room.player2 && room.scorePlayer2 > room.scorePlayer1 ? "YOU WIN" : "YOU LOSE"}</Text>
                 </View>
                 <View style={styles.playersContainer}>
-                    <ProfilePicture />
-                    <ProfilePicture />
-                </View>
-                <View style={styles.profileName}>
-                    <Text style={styles.textPlayer1}>{player1}</Text>
-                    <Text style={styles.textPlayer2}>{player2}</Text>
+                    <View style={styles.profileContainer}>
+                        <ProfilePicture />
+                        <Text style={styles.textPlayer}>{player1}</Text>
+
+                        <View style={styles.mmrContainer}>
+                            <Text style={styles.mmrFont}>{mmrPlayer1}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.profileContainer}>
+                        <ProfilePicture />
+                        <Text style={styles.textPlayer}>{player2}</Text>
+
+                        <View style={styles.mmrContainer}>
+                            <Text style={styles.mmrFont}>{mmrPlayer2}</Text>
+                        </View>
+                    </View>
                 </View>
                 <View style={styles.textTotalScore}>
-                    <Text style={{ marginLeft: 9 }}>Score</Text>
-                    <Text>Total Score</Text>
-                    <Text style={{ marginRight: 8 }}>Score</Text>
+                    <Text>Score</Text>
+
+                    <Text>Score</Text>
                 </View>
                 <View style={styles.totalScoreContainer}>
                     <View style={styles.boxesContainer}>
@@ -92,8 +228,8 @@ export default function ResultScreen({ route }) {
                         </View>
                     </View>
                     <View style={styles.boxesContainer}>
-                        <View style={styles.boxScore}>
-                            <Text style={styles.textScore}>{room.scorePlayer1 + room.scorePlayer2}</Text>
+                        <View>
+                            <Text style={styles.textScore}>VS</Text>
                         </View>
                     </View>
                     <View style={styles.boxesContainer}>
@@ -109,7 +245,7 @@ export default function ResultScreen({ route }) {
                     <Pressable style={styles.playAnotherButton}>
                         <Text style={styles.textOptions}>PLAY ANOTHER</Text>
                     </Pressable>
-                    <Pressable style={styles.backButton}>
+                    <Pressable style={styles.backButton} onPress={() => handleBackToHome()}>
                         <Text style={styles.textOptions}>BACK</Text>
                     </Pressable>
                 </View>
@@ -140,6 +276,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
+    profileContainer: {
+        width: "50%",
+        alignItems: "center",
+        backgroundColor: "red",
+    },
     profileName: {
         flexDirection: "row",
         backgroundColor: "white",
@@ -148,15 +289,21 @@ const styles = StyleSheet.create({
         height: "6%",
         alignItems: "center",
     },
-    textPlayer1: {
-        fontSize: 23,
-        fontWeight: "bold",
-        marginLeft: 30,
+    mmrContainer: {
+        width: "30%",
+        height: "20%",
+        backgroundColor: "pink",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 20,
     },
-    textPlayer2: {
+    mmrFont: {
+        color: "white",
+        fontWeight: "bold",
+    },
+    textPlayer: {
         fontSize: 23,
         fontWeight: "bold",
-        marginRight: 27,
     },
     textTotalScore: {
         flexDirection: "row",

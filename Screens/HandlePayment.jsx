@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { WebView } from "react-native-webview"
 
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> chat-Attempt
 export default function HandlePayment({route}) {
     // const [redirectUrl,setRedirectUrl] = useState("")
     const redirectUrl = route.params
