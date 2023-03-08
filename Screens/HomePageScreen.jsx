@@ -5,6 +5,7 @@ import { BASE_URL } from "../helpers/ip";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loading from "../Components/Loading";
 import Categories from "../Components/Categories";
+import Animated, { SlideInDown, SlideInLeft, SlideInRight, SlideInUp } from "react-native-reanimated";
 
 export default function HomePage({ navigation }) {
     const [categories, setCategories] = useState();
@@ -115,9 +116,9 @@ export default function HomePage({ navigation }) {
             <View style={styles.header}>
                 <Text style={styles.fontHeader}>Choose Category</Text>
             </View>
-            <View style={styles.flatListContainer}>
-                <FlatList data={categories} renderItem={({ item }) => <Categories data={item} navigation={navigation} />} keyExtractor={(item) => item.id} />
-            </View>
+            <Animated.View entering={SlideInLeft} exiting={SlideInRight} style={styles.flatListContainer}>
+                <Animated.FlatList entering={SlideInDown} exiting={SlideInUp} data={categories} renderItem={({ item }) => <Categories data={item} navigation={navigation} />} keyExtractor={(item) => item.id} />
+            </Animated.View>
         </View>
     );
 }

@@ -1,4 +1,4 @@
-import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, Touchable, TouchableOpacity } from "react-native";
+import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, Touchable, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../helpers/ip";
@@ -32,7 +32,7 @@ export default function AddCommentScreen({ route, navigation }) {
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView behavior="height" style={styles.container}>
             <View style={styles.exit}>{/* <Image style={styles.icon} source={require("../assets/icons8-close-window-48.png")} /> */}</View>
             <View style={styles.postSection}>
                 <View style={styles.profilePictureContainer}>
@@ -52,18 +52,18 @@ export default function AddCommentScreen({ route, navigation }) {
                     </View>
                 </View>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: "100%",
         backgroundColor: "#F6F8FF",
+        flexDirection: "column",
+        alignItems: "center",
     },
     exit: {
-        marginTop: 60,
         marginLeft: 5,
         width: "20%",
         height: "5%",
@@ -74,27 +74,25 @@ const styles = StyleSheet.create({
         height: "65%",
     },
     image: {
-        width: "90%",
-        height: "90%",
-        borderRadius: 100,
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        resizeMode: "cover",
+        borderColor: "yellow",
+        borderWidth: 1,
     },
     postSection: {
         flex: 4,
         // backgroundColor: "red",
         flexDirection: "row",
-        height: "100%",
         marginTop: 10,
         padding: 15,
-        marginLeft: 40,
     },
     profilePictureContainer: {
-        width: "13%",
-        backgroundColor: "#FEE4BD",
+        width: "15%",
         alignItems: "center",
         justifyContent: "center",
-        height: "6%",
-        borderRadius: 100,
-        marginTop: 13,
+        height: "15%",
         marginLeft: 10,
     },
     inputTextContainer: {
@@ -105,8 +103,6 @@ const styles = StyleSheet.create({
     },
     textInput: {
         width: "100%",
-        // backgroundColor:'yellow',
-        marginBottom: 80,
     },
     postButtonContainer: {
         top: 30,

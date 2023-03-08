@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Pressable, Image } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Pressable, Image, KeyboardAvoidingView } from "react-native";
 import { useDispatch } from "react-redux";
 import { login } from "../stores/actions/actionCreator";
 
@@ -30,33 +30,32 @@ const LoginPage = ({ navigation }) => {
     };
 
     return (
-            <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Image source={require("../assets/image.png")} style={styles.image} />
-                    <Text style={styles.textHeader}>More than just a game</Text>
-                </View>
-                <View style={styles.textInputContainer}>
-                    <Text style={styles.text}>Email</Text>
-                    <TextInput placeholderTextColor="#C0C0C0" placeholder="Email" editable multiline numberOfLines={4} maxLength={40} value={email} onChangeText={(email) => getEmailDataValue(email)} style={styles.textInput} />
-                    <Text style={styles.text}>Password</Text>
-                    <TextInput
-                        placeholder="Min. 5 characters"
-                        placeholderTextColor="#C0C0C0"
-                        secureTextEntry={true}
-                        password={true}
-                        editable
-                        numberOfLines={4}
-                        maxLength={40}
-                        value={password}
-                        onChangeText={(password) => getPasswordDataValue(password)}
-                        style={styles.textInput}
-                    />
-                </View>
-                <Pressable style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.textButton}>LOGIN</Text>
-                </Pressable>
+        <KeyboardAvoidingView behavior="height" style={styles.container}>
+            <View style={styles.textContainer}>
+                <Image source={require("../assets/image.png")} style={styles.image} />
+                <Text style={styles.textHeader}>More than just a game</Text>
             </View>
-       
+            <View style={styles.textInputContainer}>
+                <Text style={styles.text}>Email</Text>
+                <TextInput placeholderTextColor="#C0C0C0" placeholder="Email" editable multiline numberOfLines={4} maxLength={40} value={email} onChangeText={(email) => getEmailDataValue(email)} style={styles.textInput} />
+                <Text style={styles.text}>Password</Text>
+                <TextInput
+                    placeholder="Min. 5 characters"
+                    placeholderTextColor="#C0C0C0"
+                    secureTextEntry={true}
+                    password={true}
+                    editable
+                    numberOfLines={4}
+                    maxLength={40}
+                    value={password}
+                    onChangeText={(password) => getPasswordDataValue(password)}
+                    style={styles.textInput}
+                />
+            </View>
+            <Pressable style={styles.button} onPress={handleLogin}>
+                <Text style={styles.textButton}>LOGIN</Text>
+            </Pressable>
+        </KeyboardAvoidingView>
     );
 };
 

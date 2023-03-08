@@ -4,12 +4,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import store from "./stores";
-import Register from "./Screens/RegisterScreen";
 import LandingPage from "./Screens/LandingScreen";
 import CategoryDetail from "./Screens/CategoryDetailScreen";
 import Gamescreen from "./Screens/GameScreen";
 import ResultScreen from "./Screens/ResultScreen";
 import LoginPage from "./Screens/LoginScreen";
+import Register from "./Screens/RegisterScreen";
 import HomePage from "./Screens/HomePageScreen";
 import ProfilePage from "./Screens/ProfileScreen";
 import { SafeAreaView } from "react-native";
@@ -21,6 +21,7 @@ import PostDetail from "./Screens/PostDetailScreen";
 import AddCommentScreen from "./Screens/AddCommentScreen";
 import Leaderboard from "./Screens/LeaderboardScreen";
 import EditProfile from "./Screens/EditProfile";
+import FriendRequestScreen from "./Screens/FriendRequestScreen";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -32,11 +33,13 @@ const ShowTab = () => {
                     let iconName;
 
                     if (route.name === "HomePage") {
-                        iconName = focused ? "ios-information-circle" : "ios-information-circle-outline";
-                    } else if (route.name === "MENU") {
-                        iconName = focused ? "restaurant" : "restaurant-outline";
-                    } else if (route.name === "Countries") {
-                        iconName = focused ? "map" : "map-outline";
+                        iconName = focused ? "ios-home" : "ios-home-outline";
+                    } else if (route.name === "Leaderboard") {
+                        iconName = focused ? "ios-podium" : "ios-podium-outline";
+                    } else if (route.name === "FriendRequestScreen") {
+                        iconName = focused ? "ios-people" : "ios-people-outline";
+                    } else if (route.name === "ProfileScreen") {
+                        iconName = focused ? "ios-person" : "ios-person-outline";
                     }
 
                     return <Ionicons name={iconName} size={size} color={color} />;
@@ -46,9 +49,10 @@ const ShowTab = () => {
                 headerShown: false,
             })}
         >
-            <Tab.Screen name="HomePage" component={HomePage} options={{ headerShown: false }} />
+            <Tab.Screen name="HomePage" component={HomePage} options={{ headerShown: false, title: "Home" }} />
             <Tab.Screen name="Leaderboard" component={Leaderboard} />
-            <Tab.Screen name="ProfileScreen" component={ProfilePage} />
+            <Tab.Screen name="FriendRequestScreen" component={FriendRequestScreen} options={{ title: "Friend Request" }} />
+            <Tab.Screen name="ProfileScreen" component={ProfilePage} options={{ title: "Profile" }} />
         </Tab.Navigator>
     );
 };
@@ -79,17 +83,15 @@ export default function App() {
                     <Stack.Navigator>
                         {token ? (
                             <>
-                                {/* <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} /> */}
-
-                                {/* <Stack.Screen name="Login" component={LoginPage} /> */}
-                                {/* <Stack.Screen name="ProfileScreen" component={ProfilePage}/> */}
+                                <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
+                                <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+                                <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }} />
                                 <Stack.Screen name="Home" component={ShowTab} options={{ headerShown: false }} />
                                 <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
                                 <Stack.Screen name="PostDetailScreen" component={PostDetail} options={{ headerShown: false }} />
                                 <Stack.Screen name="AddPostScreen" component={AddPost} />
 
                                 <Stack.Screen name="AddCommentScreen" component={AddCommentScreen} />
-                                {/* <Stack.Screen name="Home" component={ShowTab} options={{ headerShown: false }} /> */}
                                 <Stack.Screen name="Gamescreen" component={Gamescreen} />
                                 <Stack.Screen name="ResultScreen" component={ResultScreen} />
                                 <Stack.Screen name="EditProfile" component={EditProfile} />

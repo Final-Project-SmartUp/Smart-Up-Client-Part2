@@ -36,7 +36,7 @@ export default function Post({ data, navigation }) {
     }
 
     return (
-        <>
+        <View style={{ gap: 2 }}>
             <View style={styles.container}>
                 <View style={styles.profileContainer}>
                     <Image
@@ -56,7 +56,7 @@ export default function Post({ data, navigation }) {
                     <Image style={styles.icon} source={require("../assets/icons8-response-80.png")} />
                 </View>
             </TouchableOpacity>
-        </>
+        </View>
     );
 }
 
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "flex-start",
         padding: 5,
+        paddingBottom: 10,
         alignItems: "center",
         borderBottomWidth: 1,
         // backgroundColor:'red',

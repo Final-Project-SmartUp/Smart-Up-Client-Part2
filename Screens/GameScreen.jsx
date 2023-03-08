@@ -39,6 +39,7 @@ export default function Gamescreen({ route, navigation }) {
                             if (prevTime === 0) {
                                 setCounter((prevCounter) => prevCounter + 1);
                                 setIsAnswer(false);
+                                setIsFocused(false);
                                 return time;
                             } else {
                                 return prevTime - 1;
@@ -227,7 +228,8 @@ export default function Gamescreen({ route, navigation }) {
                         />
                     </View>
                 </View>
-                <View style={styles.helper}>
+                {/* Ini show Gem */}
+                {/* <View style={styles.helper}>
                     <View style={styles.gemContainer}>
                         <View style={styles.iconContainer}>
                             <Image style={styles.iconGem} source={require("../assets/icons8-sparkling-diamond-100.png")} />
@@ -241,7 +243,7 @@ export default function Gamescreen({ route, navigation }) {
                             <Image style={styles.iconPowerUp} source={require("../assets/power.png")} />
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> */}
 
                 {counter < 5 ? (
                     <>
@@ -264,7 +266,7 @@ export default function Gamescreen({ route, navigation }) {
                                         <Text style={[styles.textAnswer]}>{option}</Text>
                                     </TouchableOpacity>
                                 ) : (
-                                    <TouchableOpacity key={`answeredd ${i}`} style={[styles.answerA, isFocused && styles.focusedButton]} onPress={() => handleCheck(option)}>
+                                    <TouchableOpacity key={`answeredd ${i}`} style={styles.answerA} onPress={() => handleCheck(option)}>
                                         <Text style={styles.textAnswer}>{option}</Text>
                                     </TouchableOpacity>
                                 );

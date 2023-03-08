@@ -21,6 +21,8 @@ export default function Leaderboard() {
                     });
                     setListofPlayer(leaderboard);
                 });
+
+                return () => unsubscribe();
             } catch (err) {
                 console.log(err);
             }
@@ -106,13 +108,13 @@ export default function Leaderboard() {
                             <Image
                                 style={styles.image}
                                 source={{
-                                    uri: listofPlayer[1].image,
+                                    uri: listofPlayer[1]?.image,
                                 }}
                             />
                         </View>
-                        <Text style={styles.nameProfile}>{listofPlayer[1].profileName}</Text>
+                        <Text style={styles.nameProfile}>{listofPlayer[1]?.profileName}</Text>
                         <View style={styles.mmrContainer}>
-                            <Text style={styles.fontMmr}>{listofPlayer[1].mmr}</Text>
+                            <Text style={styles.fontMmr}>{listofPlayer[1]?.mmr}</Text>
                         </View>
                     </View>
                     <View style={styles.name}>
@@ -120,15 +122,15 @@ export default function Leaderboard() {
                             <Image
                                 style={styles.image}
                                 source={{
-                                    uri: listofPlayer[0].image,
+                                    uri: listofPlayer[0]?.image,
                                 }}
                             />
                         </View>
                         <View style={{ flexDirection: "row" }}>
-                            <Text style={styles.nameProfile}>{listofPlayer[0].profileName}</Text>
+                            <Text style={styles.nameProfile}>{listofPlayer[0]?.profileName}</Text>
                         </View>
                         <View style={styles.mmrContainer}>
-                            <Text style={styles.fontMmr}>{listofPlayer[0].mmr}</Text>
+                            <Text style={styles.fontMmr}>{listofPlayer[0]?.mmr}</Text>
                         </View>
                     </View>
                     <View style={styles.name}>
@@ -136,13 +138,13 @@ export default function Leaderboard() {
                             <Image
                                 style={styles.image}
                                 source={{
-                                    uri: listofPlayer[2].image,
+                                    uri: listofPlayer[2]?.image,
                                 }}
                             />
                         </View>
-                        <Text style={styles.nameProfile}> {listofPlayer[2].profileName}</Text>
+                        <Text style={styles.nameProfile}> {listofPlayer[2]?.profileName}</Text>
                         <View style={styles.mmrContainer}>
-                            <Text style={styles.fontMmr}>{listofPlayer[2].mmr}</Text>
+                            <Text style={styles.fontMmr}>{listofPlayer[2]?.mmr}</Text>
                         </View>
                     </View>
                 </View>

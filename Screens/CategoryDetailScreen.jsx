@@ -228,7 +228,7 @@ export default function CategoryDetail({ navigation, route }) {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <View style={styles.firstPartContainer}>
                     <View style={styles.categoryName}>
@@ -277,7 +277,6 @@ const styles = StyleSheet.create({
     categoryName: {
         height: "10%",
         width: "100%",
-        marginTop: 20,
     },
     textCategoryName: {
         textAlign: "center",
@@ -316,7 +315,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#B19C77",
         marginBottom: 3,
         height: "4%",
-        width: "15%",
+        width: "30%",
         marginLeft: 10,
         justifyContent: "center",
         alignItems: "center",
@@ -327,7 +326,9 @@ const styles = StyleSheet.create({
         color: "white",
     },
     flatListContainer: {
-        height: "60%",
+        flex: 1,
+        width: "95%",
+        alignSelf: "center",
         marginTop: 10,
     },
 });

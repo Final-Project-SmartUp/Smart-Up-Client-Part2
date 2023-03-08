@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import PostDetailReply from "../Components/PostDetailReply";
 import { BASE_URL } from "../helpers/ip";
 import { fetchPost, fetchPosts } from "../stores/actions/actionCreator";
+import { primaryColor } from "../config/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PostDetail({ route, navigation }) {
     const postId = route.params;
@@ -48,7 +50,7 @@ export default function PostDetail({ route, navigation }) {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.insideContainer}>
                 <TouchableOpacity onPress={() => handleGoBack(post.CategoryId)} style={styles.pressableBack}>
                     <Text style={styles.textAdd}>Back</Text>
@@ -70,23 +72,24 @@ export default function PostDetail({ route, navigation }) {
                 </View>
                 <View style={styles.postContainer}>
                     <Text style={styles.textPost}>{post.description}</Text>
+                </View>
+                <View style={{ paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: "grey" }}>
                     <TouchableOpacity onPress={() => handleAddComment()} style={styles.pressable}>
-                        <Text style={styles.textAdd}>Add Commment</Text>
+                        <Text style={styles.textAdd}>Reply</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.flatListContainer}>
                     <FlatList data={post.Comments} renderItem={({ item }) => <PostDetailReply data={item} />} keyExtractor={(item) => item.id} />
                 </View>
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        height: "100%",
         flex: 1,
-        paddingTop: StatusBar.currentHeight,
+        // paddingTop: StatusBar.currentHeight,
     },
     insideContainer: {
         height: "90%",
@@ -140,6 +143,7 @@ const styles = StyleSheet.create({
         borderBottomColor: "grey",
         borderBottomWidth: 1,
         paddingTop: 10,
+        paddingBottom: 10,
         justifyContent: "space-between",
     },
 
@@ -148,12 +152,13 @@ const styles = StyleSheet.create({
     },
     pressable: {
         width: "20%",
-        height: "15%",
+        height: 30,
         backgroundColor: primaryColor,
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 3,
+        marginTop: 10,
     },
 
     profileImageReplyContainerNext: {

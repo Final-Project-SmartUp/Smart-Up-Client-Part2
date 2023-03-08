@@ -7,6 +7,7 @@ import { BASE_URL } from "../helpers/ip";
 import { fetchUser } from "../stores/actions/actionCreator";
 import FriendList from "../Components/FriendList";
 import { FlatList } from "react-native";
+import Loading from "../Components/Loading";
 
 const ProfilePage = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -15,9 +16,15 @@ const ProfilePage = ({ navigation }) => {
     const { user: userData, loading } = useSelector((state) => {
         return state.user;
     });
+
+    const handleGoToEditPage = () => {
+        navigation.navigate("EditProfile");
+    };
+
     useEffect(() => {
         dispatch(fetchUser());
     }, []);
+
     useEffect(() => {
         (async () => {
             try {
@@ -37,11 +44,7 @@ const ProfilePage = ({ navigation }) => {
         })();
     }, []);
     if (loading || friendListLoading) {
-        return (
-            <View>
-                <Text>Loading...................</Text>
-            </View>
-        );
+        return <Loading />;
     }
 
     const DATA = [
@@ -105,7 +108,7 @@ const ProfilePage = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.postButtonContainer}>
-                <TouchableOpacity style={styles.postButton}>
+                <TouchableOpacity style={styles.postButton} onPress={() => handleGoToEditPage()}>
                     <Text style={styles.textPost}>Edit Profile</Text>
                 </TouchableOpacity>
             </View>
@@ -114,7 +117,7 @@ const ProfilePage = ({ navigation }) => {
                 <Image
                     style={styles.profileImage}
                     source={{
-                        uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                        uri: userData?.image,
                     }}
                 />
                 <Text style={styles.name}>{userData?.profileName}</Text>

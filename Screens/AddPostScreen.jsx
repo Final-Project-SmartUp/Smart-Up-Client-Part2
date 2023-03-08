@@ -1,4 +1,4 @@
-import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, Touchable, TouchableOpacity } from "react-native";
+import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, Touchable, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../helpers/ip";
@@ -35,8 +35,7 @@ export default function AddPost({ route, navigation }) {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.exit}>{/* <Image style={styles.icon} source={require("../assets/icons8-close-window-48.png")} /> */}</View>
+        <KeyboardAvoidingView style={styles.container} behavior="height">
             <View style={styles.postSection}>
                 <View style={styles.profilePictureContainer}>
                     <Image
@@ -55,18 +54,18 @@ export default function AddPost({ route, navigation }) {
                     </View>
                 </View>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: "100%",
         backgroundColor: "#F6F8FF",
+        flexDirection: "column",
+        alignItems: "center",
     },
     exit: {
-        marginTop: 60,
         marginLeft: 5,
         width: "20%",
         height: "5%",
@@ -85,10 +84,8 @@ const styles = StyleSheet.create({
         flex: 4,
         // backgroundColor: "red",
         flexDirection: "row",
-        height: "100%",
         marginTop: 10,
         padding: 15,
-        marginLeft: 40,
     },
     profilePictureContainer: {
         width: "13%",
@@ -108,8 +105,6 @@ const styles = StyleSheet.create({
     },
     textInput: {
         width: "100%",
-        // backgroundColor:'yellow',
-        marginBottom: 80,
     },
     postButtonContainer: {
         top: 30,
