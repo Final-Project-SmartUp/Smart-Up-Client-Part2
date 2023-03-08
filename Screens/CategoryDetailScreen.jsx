@@ -30,6 +30,7 @@ export default function CategoryDetail({ navigation, route }) {
     //! Aktifkan tombol findMatch (isFindMatch Jadi True)
     const playGame = async () => {
         try {
+            console.log(await AsyncStorage.getItem("userId"))
             const userRef = doc(db, "users", await AsyncStorage.getItem("userId"));
             await updateDoc(userRef, {
                 isFindMatch: true,
@@ -119,7 +120,8 @@ export default function CategoryDetail({ navigation, route }) {
                                 navigation.navigate("Gamescreen", {
                                     roomId: newRoom.id,
                                 });
-                            } else if (allRooms.length > 0 && allRooms[0].player2 === null) {
+                            } else if (allRooms.length > 0) {
+                                console.log("masuk sini")
                                 const { data: joinRoom } = await axios({
                                     method: "PUT",
                                     url: `http://${BASE_URL}:3001/rooms/${allRooms[0].id}`,

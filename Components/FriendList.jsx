@@ -2,10 +2,11 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import { primaryColor } from "../config/colors";
 
 export default function FriendList({ data, index }) {
+    console.log(data)
     return (
         <View style={styles.container}>
             <View style={styles.nameContainer}>
-                <Text style={styles.text}>{data.profileName}</Text>
+                <Text style={styles.text}>{data.name}</Text>
             </View>
             <View style={styles.rrmContainer}>
                 <Text style={styles.fontMmr}>{data.mmr}</Text>

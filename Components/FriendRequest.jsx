@@ -1,7 +1,48 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import React from "react";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BASE_URL } from "../helpers/ip";
+import { useDispatch } from "react-redux";
+import { fetchFriendRequest, fetchUser } from "../stores/actions/actionCreator";
 
 export default function FriendRequest({ data }) {
+    console.log(data,"<<<< ini data und")
+    // console.log(data.id)
+    const dispatch = useDispatch()
+    const handleFriendRequest = async(value)=>{
+        const token = await AsyncStorage.getItem("access_token")
+        try {
+            if(value === "acc"){
+                console.log("masuk acc")
+                console.log(data.id)
+                const {data:test} = await axios({
+                    method:'put',
+                    url:`http://${BASE_URL}:3001/friends/acceptFriend/${data.id}`,
+                    headers: {
+                        access_token : token
+                    }
+                })
+            }else{
+                console.log("masuk dec")
+                const {data:test} = await axios({
+                    method:'put',
+                    url:`http://${BASE_URL}:3001/friends/decline/${data.id}`,
+                    headers: {
+                        access_token : token
+                    }
+                })
+                
+            }
+          
+        } catch (err) {
+            console.log(err)
+        } finally{
+            dispatch(fetchFriendRequest())
+            dispatch(fetchUser())
+        }
+        
+    }
     return (
         <View style={styles.tableRow}>
             <View style={styles.friendInfo}>
@@ -11,13 +52,13 @@ export default function FriendRequest({ data }) {
                         uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
                     }}
                 />
-                <Text>{data.title}</Text>
+                <Text>{data?.name}</Text>
             </View>
             <View style={styles.action}>
-                <TouchableOpacity style={[styles.button, styles.cancelButton]}>
+                <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={()=> handleFriendRequest("decline")}>
                     <Text style={styles.actionText}>Cancel</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.acceptButton]}>
+                <TouchableOpacity style={[styles.button, styles.acceptButton]} onPress={()=>handleFriendRequest("acc")}>
                     <Text style={styles.actionText}>Accept</Text>
                 </TouchableOpacity>
             </View>

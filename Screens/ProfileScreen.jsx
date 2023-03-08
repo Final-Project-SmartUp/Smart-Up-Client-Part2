@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View, Image, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../helpers/ip";
-import { fetchUser } from "../stores/actions/actionCreator";
+import { fetchFriendRequest, fetchUser } from "../stores/actions/actionCreator";
 import FriendList from "../Components/FriendList";
 import { FlatList } from "react-native";
 import Loading from "../Components/Loading";
