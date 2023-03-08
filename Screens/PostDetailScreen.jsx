@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, TouchableOpacity, FlatList, StatusBar } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import PostDetailReply from "../Components/PostDetailReply";
 import { primaryColor } from "../config/colors";
