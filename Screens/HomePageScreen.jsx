@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loading from "../Components/Loading";
 import Categories from "../Components/Categories";
 import Animated, { SlideInDown, SlideInLeft, SlideInRight, SlideInUp } from "react-native-reanimated";
+import { buttonTertiarty, fontHeaderBold, fontHeaderSize, primaryColor, tertiartyColor } from "../config/colors";
 
 export default function HomePage({ navigation }) {
     const [categories, setCategories] = useState();
@@ -117,7 +118,14 @@ export default function HomePage({ navigation }) {
                 <Text style={styles.fontHeader}>Choose Category</Text>
             </View>
             <Animated.View entering={SlideInLeft} exiting={SlideInRight} style={styles.flatListContainer}>
-                <Animated.FlatList entering={SlideInDown} exiting={SlideInUp} data={categories} renderItem={({ item }) => <Categories data={item} navigation={navigation} />} keyExtractor={(item) => item.id} />
+                <Animated.FlatList
+                    showsHorizontalScrollIndicator={false}
+                    entering={SlideInDown}
+                    exiting={SlideInUp}
+                    data={categories}
+                    renderItem={({ item }) => <Categories data={item} navigation={navigation} />}
+                    keyExtractor={(item) => item.id}
+                />
             </Animated.View>
         </View>
     );
@@ -127,13 +135,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 10,
+        backgroundColor: "tertiartyColor",
     },
     profileContainer: {
         // flex:1,
         marginTop: 40,
         height: "6%",
         width: "100%",
-        // backgroundColor:'pink',
         justifyContent: "center",
         alignItems: "flex-end",
     },
@@ -159,16 +167,16 @@ const styles = StyleSheet.create({
         // backgroundColor:'yellow'
     },
     fontHeader: {
-        fontSize: 25,
-        fontWeight: "bold",
+        fontSize: fontHeaderSize,
+        fontWeight: fontHeaderBold,
         letterSpacing: 1,
-        color: "#E26A82",
+        color: "#0A7F7F",
     },
     flatListContainer: {
         height: "85%",
         marginTop: 10,
-
         marginBottom: 30,
+        paddingHorizontal: 10,
     },
     scrollContainer: {
         width: "100%",

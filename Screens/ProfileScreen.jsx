@@ -8,6 +8,7 @@ import { fetchFriendRequest, fetchUser } from "../stores/actions/actionCreator";
 import FriendList from "../Components/FriendList";
 import { FlatList } from "react-native";
 import Loading from "../Components/Loading";
+import { primaryColor, tertiartyColor } from "../config/colors";
 
 const ProfilePage = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#9FADAD",
+        backgroundColor: "#0A7F7F",
         flex: 1,
         justifyContent: "flex-start",
     },
@@ -161,8 +162,8 @@ const styles = StyleSheet.create({
     },
     description: {
         fontSize: 25,
-        color: "white",
-        marginBottom: 20,
+        color: tertiartyColor,
+        marginBottom: 25,
         fontWeight: "bold",
         letterSpacing: 1,
     },
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     friendListContainer: {
-        backgroundColor: "white",
+        backgroundColor: primaryColor,
         width: "100%",
         height: "70%",
         marginTop: 20,
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
     fontFriendList: {
         fontSize: 20,
         fontWeight: "bold",
-        color: "#9FADAD",
+        color: "#0A7F7F",
     },
     categoryContainer: {
         height: "auto",

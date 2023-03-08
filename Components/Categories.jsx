@@ -17,14 +17,14 @@ export default function Categories({ data, index, navigation }) {
 const styles = StyleSheet.create({
     container: {
         padding: 20,
-        marginBottom: 30,
+        marginBottom: 10,
         marginTop: 10,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#FEE4BD",
-        width: "80%",
-        borderRadius: 30,
-        marginLeft: 45,
+        // width: "90%",
+        borderRadius: 20,
+        // marginLeft: 45,
         flex: 1,
         flexDirection: "row",
     },
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 
     text: {
         fontWeight: "bold",
-        color: "#E26A82",
+        color: "#0A7F7F",
         fontSize: 20,
     },
 });

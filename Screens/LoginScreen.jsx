@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Pressa
 import { useDispatch } from "react-redux";
 import Loading from "../Components/Loading";
 import { login } from "../stores/actions/actionCreator";
+import { primaryColor, buttonPrimary } from "../config/colors";
 
 const LoginPage = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
         height: "100%",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#FFE59E",
+        backgroundColor: primaryColor,
     },
     textContainer: {
         marginTop: 100,
@@ -126,8 +127,8 @@ const styles = StyleSheet.create({
         marginBottom: 74,
         borderRadius: 20,
         borderWidth: 2,
-        backgroundColor: "white",
-        borderColor: "white",
+        backgroundColor: buttonPrimary,
+        borderColor: buttonPrimary,
         justifyContent: "center",
         alignItems: "center",
     },

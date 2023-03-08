@@ -97,7 +97,7 @@ export default function Payment({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#D3ECEB",
+        backgroundColor: "#F6F8FF",
         height: "100%",
     },
     header: {

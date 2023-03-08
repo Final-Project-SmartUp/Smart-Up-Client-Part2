@@ -7,6 +7,7 @@ import db from "../config/firebaseConnection";
 import { BASE_URL } from "../helpers/ip";
 import axios from "axios";
 import Loading from "../Components/Loading";
+import { primaryColor, secondaryColor } from "../config/colors";
 
 export default function Leaderboard() {
     const [listofPlayer, setListofPlayer] = useState();
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: StatusBar.currentHeight,
-        backgroundColor: "#d7ecd9",
+        backgroundColor: "#F6F8FF",
     },
     header: {
         height: "2%",
