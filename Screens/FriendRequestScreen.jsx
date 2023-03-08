@@ -5,26 +5,22 @@ import { FlatList } from "react-native";
 import FriendRequest from "../Components/FriendRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFriendRequest } from "../stores/actions/actionCreator";
+import Loading from "../Components/Loading";
+import { tertiartyColor } from "../config/colors";
 
 const FriendRequestScreen = () => {
-    const dispatch = useDispatch()
-    const {friendRequest,fetchFriendRequestLoading} = useSelector((state)=>{
-        return state.user
-    })
-    console.log(friendRequest,"ini friend Request")
+    const dispatch = useDispatch();
+    const { friendRequest, fetchFriendRequestLoading } = useSelector((state) => {
+        return state.user;
+    });
+    console.log(friendRequest, "ini friend Request");
     const [item, setItem] = useState();
-    useEffect(()=>{
-        dispatch(fetchFriendRequest())
-    },[])
-    
-    if(fetchFriendRequestLoading){
-        return(
-            <View>
-                <Text>
-                    LOADING!!!!!!!
-                </Text>
-            </View>
-        )
+    useEffect(() => {
+        dispatch(fetchFriendRequest());
+    }, []);
+
+    if (fetchFriendRequestLoading) {
+        return <Loading />;
     }
 
     return (
@@ -48,7 +44,7 @@ const styles = StyleSheet.create({
     textTitle: {
         fontSize: 30,
         fontWeight: "bold",
-        color: "black",
+        color: tertiartyColor,
     },
     table: {
         flex: 1,

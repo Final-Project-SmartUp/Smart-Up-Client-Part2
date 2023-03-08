@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { primaryColor } from "../config/colors";
+import { primaryColor, tertiartyColor } from "../config/colors";
 
 export default function Categories({ data, index, navigation }) {
     //   console.log(index, "iniii");
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 
     text: {
         fontWeight: "bold",
-        color: "#E26A82",
+        color: tertiartyColor,
         fontSize: 20,
     },
 });

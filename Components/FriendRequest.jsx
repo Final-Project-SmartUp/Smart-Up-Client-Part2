@@ -7,42 +7,37 @@ import { useDispatch } from "react-redux";
 import { fetchFriendRequest, fetchUser } from "../stores/actions/actionCreator";
 
 export default function FriendRequest({ data }) {
-    console.log(data,"<<<< ini data und")
-    // console.log(data.id)
-    const dispatch = useDispatch()
-    const handleFriendRequest = async(value)=>{
-        const token = await AsyncStorage.getItem("access_token")
+    const dispatch = useDispatch();
+    const handleFriendRequest = async (value) => {
+        const token = await AsyncStorage.getItem("access_token");
         try {
-            if(value === "acc"){
-                console.log("masuk acc")
-                console.log(data.id)
-                const {data:test} = await axios({
-                    method:'put',
-                    url:`http://${BASE_URL}:3001/friends/acceptFriend/${data.id}`,
+            if (value === "acc") {
+                console.log("masuk acc");
+                console.log(data.id);
+                const { data: test } = await axios({
+                    method: "put",
+                    url: `http://${BASE_URL}:3001/friends/acceptFriend/${data.id}`,
                     headers: {
-                        access_token : token
-                    }
-                })
-            }else{
-                console.log("masuk dec")
-                const {data:test} = await axios({
-                    method:'put',
-                    url:`http://${BASE_URL}:3001/friends/decline/${data.id}`,
+                        access_token: token,
+                    },
+                });
+            } else {
+                console.log("masuk dec");
+                const { data: test } = await axios({
+                    method: "put",
+                    url: `http://${BASE_URL}:3001/friends/decline/${data.id}`,
                     headers: {
-                        access_token : token
-                    }
-                })
-                
+                        access_token: token,
+                    },
+                });
             }
-          
         } catch (err) {
-            console.log(err)
-        } finally{
-            dispatch(fetchFriendRequest())
-            dispatch(fetchUser())
+            console.log(err);
+        } finally {
+            dispatch(fetchFriendRequest());
+            dispatch(fetchUser());
         }
-        
-    }
+    };
     return (
         <View style={styles.tableRow}>
             <View style={styles.friendInfo}>
@@ -55,10 +50,10 @@ export default function FriendRequest({ data }) {
                 <Text>{data?.name}</Text>
             </View>
             <View style={styles.action}>
-                <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={()=> handleFriendRequest("decline")}>
+                <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => handleFriendRequest("decline")}>
                     <Text style={styles.actionText}>Cancel</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.acceptButton]} onPress={()=>handleFriendRequest("acc")}>
+                <TouchableOpacity style={[styles.button, styles.acceptButton]} onPress={() => handleFriendRequest("acc")}>
                     <Text style={styles.actionText}>Accept</Text>
                 </TouchableOpacity>
             </View>

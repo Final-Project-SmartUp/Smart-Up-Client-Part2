@@ -14,6 +14,7 @@ import Loading from "../Components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../stores/actions/actionCreator";
 import playSound from "../Components/Sound";
+import { primaryColor, tertiartyColor } from "../config/colors";
 
 export default function Gamescreen({ route, navigation }) {
     const { roomId } = route.params;
@@ -159,7 +160,7 @@ export default function Gamescreen({ route, navigation }) {
     //! handleCheck
     const handleCheck = async (option) => {
         setSelected(option);
-        
+
         setIsAnswer(true);
         setIsFocused(true);
         if (option === questions[counter]?.correctAnswer) {
@@ -227,7 +228,7 @@ export default function Gamescreen({ route, navigation }) {
                     <Image
                         style={styles.image}
                         source={{
-                            uri: "https://img.freepik.com/free-vector/characters-celebrating-holi-festival-concept_23-2148405462.jpg?w=1060&t=st=1677830591~exp=1677831191~hmac=cb58a785423477d3131c5bc4d671edd861a29192d02521e4fe9431928c177f8e",
+                            uri: player1.image,
                         }}
                     />
                     <View style={styles.textScoreContainer}>
@@ -247,7 +248,7 @@ export default function Gamescreen({ route, navigation }) {
                     <Image
                         style={styles.image}
                         source={{
-                            uri: "https://img.freepik.com/free-vector/characters-celebrating-holi-festival-concept_23-2148405462.jpg?w=1060&t=st=1677830591~exp=1677831191~hmac=cb58a785423477d3131c5bc4d671edd861a29192d02521e4fe9431928c177f8e",
+                            uri: player2.image,
                         }}
                     />
                 </View>
@@ -280,7 +281,12 @@ export default function Gamescreen({ route, navigation }) {
                         {options?.map((option, i) => {
                             return isAnswer ? (
                                 // if option === questions[counter]
-                                <TouchableOpacity key={`answered ${i}`} style={option === questions[counter].correctAnswer ? [styles.answerA,styles.focusedButton] : styles.answerA} onPress={() => handleCheck(option)} disabled={true}>
+                                <TouchableOpacity
+                                    key={`answered ${i}`}
+                                    style={option === questions[counter].correctAnswer ? [styles.answerA, styles.correctButton] : [styles.answerA, styles.wrongButton]}
+                                    onPress={() => handleCheck(option)}
+                                    disabled={true}
+                                >
                                     <Text style={[styles.textAnswer]}>{option}</Text>
                                 </TouchableOpacity>
                             ) : (
@@ -297,6 +303,12 @@ export default function Gamescreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+    correctButton: {
+        backgroundColor: tertiartyColor,
+    },
+    wrongButton: {
+        backgroundColor: "tomato",
+    },
     focusedButton: {
         backgroundColor: "red",
     },
@@ -408,18 +420,17 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     answerA: {
-        backgroundColor: "#FFC3BD",
+        backgroundColor: primaryColor,
         width: "70%",
         height: 70,
         borderRadius: 30,
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 20,
-        // backgroundColor:'yellow'
     },
     textAnswer: {
         fontSize: 20,
-        color: "white",
+        color: "black",
         fontWeight: "bold",
         textAlign: "center",
     },

@@ -24,6 +24,7 @@ import EditProfile from "./Screens/EditProfile";
 import FriendRequestScreen from "./Screens/FriendRequestScreen";
 import Payment from "./Screens/PaymentScreen";
 import HandlePayment from "./Screens/HandlePayment";
+import { tertiartyColor } from "./config/colors";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -48,7 +49,7 @@ const ShowTab = () => {
 
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: "tomato",
+                tabBarActiveTintColor: tertiartyColor,
                 tabBarInactiveTintColor: "gray",
                 headerShown: false,
             })}

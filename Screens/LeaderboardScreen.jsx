@@ -7,6 +7,7 @@ import db from "../config/firebaseConnection";
 import { BASE_URL } from "../helpers/ip";
 import axios from "axios";
 import Loading from "../Components/Loading";
+import { primaryColor, secondaryColor, tertiartyColor } from "../config/colors";
 
 export default function Leaderboard() {
     const [listofPlayer, setListofPlayer] = useState();
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: StatusBar.currentHeight,
-        backgroundColor: "#d7ecd9",
+        backgroundColor: secondaryColor,
     },
     header: {
         height: "2%",
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-evenly",
     },
     button: {
-        backgroundColor: "#87ae73",
+        backgroundColor: tertiartyColor,
         width: "40%",
         alignItems: "center",
         justifyContent: "center",
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     first: {
-        backgroundColor: "#cfe19c",
+        backgroundColor: primaryColor,
         height: "43%",
         width: "65%",
         justifyContent: "center",
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     second: {
-        backgroundColor: "#cfe19c",
+        backgroundColor: primaryColor,
         marginTop: 8,
         justifyContent: "center",
         alignItems: "center",
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     mmrContainer: {
-        backgroundColor: "white",
+        backgroundColor: primaryColor,
         width: "60%",
         height: "13%",
         marginTop: 10,
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
         // backgroundColor:'green'
     },
     fontMmr: {
-        color: "#87ae73",
+        color: tertiartyColor,
         fontWeight: "bold",
     },
 });

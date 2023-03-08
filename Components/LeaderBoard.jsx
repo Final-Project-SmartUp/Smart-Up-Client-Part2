@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Image } from "react-native";
+import { primaryColor, tertiartyColor } from "../config/colors";
 
 export default function LeaderboardComponent({ data, index }) {
     //   console.log(index, "iniii");
@@ -37,15 +38,16 @@ const styles = StyleSheet.create({
         marginLeft: 40,
     },
     rrmContainer: {
-        backgroundColor: "white",
-        width: "11%",
-        height: "105%",
-        borderRadius: 100,
+        backgroundColor: primaryColor,
+        paddingVertical: 5,
+        width: "15%",
+        height: "100%",
+        borderRadius: 15,
         marginLeft: 60,
     },
     fontMmr: {
         textAlign: "center",
-        color: "#87ae73",
+        color: tertiartyColor,
         fontWeight: "bold",
     },
     text: {
