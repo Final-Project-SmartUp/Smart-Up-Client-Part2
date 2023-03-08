@@ -80,12 +80,9 @@ const ProfilePage = ({navigation}) => {
     )
   }
 
-
-    const Item = ({ title }) => (
-        <View style={styles.item}>
-            <Text style={styles.title}>{title}</Text>
-        </View>
-    );
+    const handleGoToEditPage = () =>{
+      navigation.navigate("EditProfile")
+    }
 
     return (
         <View style={styles.container}>

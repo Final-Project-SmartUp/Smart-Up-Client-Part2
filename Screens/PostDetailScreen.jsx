@@ -7,7 +7,6 @@ import PostDetailReply from "../Components/PostDetailReply";
 import { primaryColor } from "../config/colors";
 import { BASE_URL } from "../helpers/ip";
 import { fetchPost, fetchPosts } from "../stores/actions/actionCreator";
-import { primaryColor } from "../config/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PostDetail({ route, navigation }) {
