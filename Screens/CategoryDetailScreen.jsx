@@ -243,9 +243,9 @@ export default function CategoryDetail({ navigation, route }) {
                         />
                     </View>
                     <View style={styles.borderImage}>
-                        <Pressable onPress={playGame}>
+                        <TouchableOpacity onPress={playGame}>
                             <Text style={styles.textButton}>Play Game</Text>
-                        </Pressable>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <TouchableOpacity onPress={() => handleAddPost(categoryId)} style={styles.postButton}>

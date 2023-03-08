@@ -42,6 +42,8 @@ const ShowTab = () => {
                         iconName = focused ? "ios-people" : "ios-people-outline";
                     } else if (route.name === "ProfileScreen") {
                         iconName = focused ? "ios-person" : "ios-person-outline";
+                    } else if (route.name === "PaymentScreen") {
+                        iconName = focused ? "ios-card" : "ios-card-outline";
                     }
 
                     return <Ionicons name={iconName} size={size} color={color} />;
@@ -53,6 +55,7 @@ const ShowTab = () => {
         >
             <Tab.Screen name="HomePage" component={HomePage} options={{ headerShown: false, title: "Home" }} />
             <Tab.Screen name="Leaderboard" component={Leaderboard} />
+            <Tab.Screen name="PaymentScreen" component={Payment} />
             <Tab.Screen name="FriendRequestScreen" component={FriendRequestScreen} options={{ title: "Friend Request" }} />
             <Tab.Screen name="ProfileScreen" component={ProfilePage} options={{ title: "Profile" }} />
         </Tab.Navigator>
@@ -91,6 +94,7 @@ export default function App() {
                                 <Stack.Screen name="Home" component={ShowTab} options={{ headerShown: false }} />
                                 <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
                                 <Stack.Screen name="PostDetailScreen" component={PostDetail} options={{ headerShown: false }} />
+                                <Stack.Screen name="HandlePayment" component={HandlePayment} />
                                 <Stack.Screen name="AddPostScreen" component={AddPost} />
                                 <Stack.Screen name="AddCommentScreen" component={AddCommentScreen} />
                                 <Stack.Screen name="Gamescreen" component={Gamescreen} />

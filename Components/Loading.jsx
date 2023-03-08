@@ -1,22 +1,11 @@
-import { Image, StyleSheet, View } from "react-native";
+import React from "react";
+import { View, Text } from "react-native";
+import AnimatedLottieView from "lottie-react-native";
 
 export default function Loading() {
     return (
-        <View style={styles.container}>
-            <Image style={styles.image} source={require("../assets/loading-bar-932_512.gif")} />
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", margin: 0 }}>
+            <AnimatedLottieView source={require("../assets/loading.json")} autoPlay loop={true} resizeMode="cover" style={{ height: 300 }} />
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        height: "100%",
-        backgroundColor: "white",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    image: {
-        width: "70%",
-        height: "30%",
-    },
-});

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Pressable, Image, KeyboardAvoidingView } from "react-native";
 import { useDispatch } from "react-redux";
+import Loading from "../Components/Loading";
 import { login } from "../stores/actions/actionCreator";
 
 const LoginPage = ({ navigation }) => {
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
     function getEmailDataValue(e) {
         setEmail(e);
@@ -17,17 +19,23 @@ const LoginPage = ({ navigation }) => {
 
     const handleLogin = async (e) => {
         try {
+            setLoading(true);
             await dispatch(
                 login({
                     email: email,
                     password: password,
                 })
             );
+            setLoading(false);
             navigation.navigate("Home");
         } catch (err) {
             console.log(err);
         }
     };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <KeyboardAvoidingView behavior="height" style={styles.container}>

@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     profileContainer: {
         width: "50%",
         alignItems: "center",
-        backgroundColor: "red",
+        // backgroundColor: "red",
     },
     profileName: {
         flexDirection: "row",

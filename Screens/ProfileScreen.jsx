@@ -9,80 +9,70 @@ import FriendList from "../Components/FriendList";
 import { FlatList } from "react-native";
 import Loading from "../Components/Loading";
 
+const ProfilePage = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const [friendList, setFriendList] = useState([]);
+    const [friendListLoading, setFriendListLoading] = useState(true);
+    const [rankLoading, setRankLoading] = useState(true);
+    const [rank, setRank] = useState("NaN");
+    const { user: userData, loading } = useSelector((state) => {
+        return state.user;
+    });
+    useEffect(() => {
+        dispatch(fetchUser());
+    }, []);
 
-
-
-
-const ProfilePage = ({navigation}) => {
-  const dispatch = useDispatch()
-  const [friendList,setFriendList] = useState([])
-  const [friendListLoading,setFriendListLoading] = useState(true)
-  const [rankLoading,setRankLoading] = useState(true)
-  const [rank,setRank] = useState("NaN")
-  const {user:userData,loading} = useSelector((state)=>{
-    return state.user
-  })
-  useEffect(()=>{
-    dispatch(fetchUser())
-  },[])
-  useEffect(()=>{
-    (async()=>{
-      try {
-        const {data} = await axios({
-          method:'get',
-          url:`http://${BASE_URL}:3001/friends`,
-          headers:{
-            access_token : await AsyncStorage.getItem("access_token")
-          }
-        })
-        setFriendList(data)
-      } catch (err) {
-        console.log(err)
-      } finally{
-        setFriendListLoading(false)
-      }
-
-    })()
-  },[])
-
-  useEffect(()=>{
-    const fetchLeaderBoard = async()=>{
-      const token = await AsyncStorage.getItem("access_token")
-      const userId = await AsyncStorage.getItem("userId")
-      try {
-        const {data} = await axios({
-          method:'get',
-          url:`http://${BASE_URL}:3001/users/leaderboard`,
-          headers:{
-            access_token: token
-          }
-        })
-        data.forEach((el,i)=>{
-          console.log(el)
-            if(el.id === userId){
-              setRank(i+1)
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data } = await axios({
+                    method: "get",
+                    url: `http://${BASE_URL}:3001/friends`,
+                    headers: {
+                        access_token: await AsyncStorage.getItem("access_token"),
+                    },
+                });
+                setFriendList(data);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setFriendListLoading(false);
             }
-        })
-        setRankLoading(false)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    fetchLeaderBoard()
-  },[])
-  if(loading || friendListLoading || rankLoading){
-    return (
-      <View>
-        <Text>
-          Loading...................
-        </Text>
-      </View>
-    )
-  }
+        })();
+    }, []);
 
-    const handleGoToEditPage = () =>{
-      navigation.navigate("EditProfile")
+    useEffect(() => {
+        const fetchLeaderBoard = async () => {
+            const token = await AsyncStorage.getItem("access_token");
+            const userId = await AsyncStorage.getItem("userId");
+            try {
+                const { data } = await axios({
+                    method: "get",
+                    url: `http://${BASE_URL}:3001/users/leaderboard`,
+                    headers: {
+                        access_token: token,
+                    },
+                });
+                data.forEach((el, i) => {
+                    console.log(el);
+                    if (el.id === userId) {
+                        setRank(i + 1);
+                    }
+                });
+                setRankLoading(false);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetchLeaderBoard();
+    }, []);
+    if (loading || friendListLoading || rankLoading) {
+        return <Loading />;
     }
+
+    const handleGoToEditPage = () => {
+        navigation.navigate("EditProfile");
+    };
 
     return (
         <View style={styles.container}>
@@ -93,18 +83,32 @@ const ProfilePage = ({navigation}) => {
             </View>
             <View style={styles.profileContainer}>
                 <Text style={styles.description}>Profile</Text>
-                <Image
-                    style={styles.profileImage}
-                    source={{
-                        uri: userData?.image,
-                    }}
-                />
+                {userData.image ? (
+                    <Image
+                        style={styles.profileImage}
+                        source={{
+                            uri: userData?.image,
+                        }}
+                    />
+                ) : (
+                    <Image
+                        style={styles.profileImage}
+                        source={{
+                            uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                        }}
+                    />
+                )}
+
                 <Text style={styles.name}>{userData?.profileName}</Text>
             </View>
             <View style={styles.stats}>
                 <View style={styles.statMmrContainer}>
                     <Text style={styles.statRank}>MMR</Text>
                     <Text style={styles.statValue}>{userData?.mmr}</Text>
+                </View>
+                <View style={styles.statRankContainer}>
+                    <Text style={styles.statRank}>Gems</Text>
+                    <Text style={styles.statValue}>{userData?.gem}</Text>
                 </View>
                 <View style={styles.statRankContainer}>
                     <Text style={styles.statRank}>Rank</Text>
@@ -141,8 +145,6 @@ const styles = StyleSheet.create({
         height: "30%",
         justifyContent: "center",
         alignItems: "center",
-        // borderBottomWidth: 1,
-        // backgroundColor: "red",
         borderBottomColor: "#C0C791",
     },
     profileImage: {
@@ -165,14 +167,12 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
     },
     stats: {
-        // backgroundColor: "black",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-evenly",
         width: "100%",
         marginTop: 20,
         marginLeft: 80,
-        // justifyContent: "flex-start",
     },
 
     statMmrContainer: {
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     },
     statRankContainer: {
         alignItems: "center",
-        marginRight: 120,
+        marginRight: 103,
         marginLeft: 20,
     },
     statRank: {

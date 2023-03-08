@@ -11,6 +11,10 @@ import db from "../config/firebaseConnection";
 import { useFocusEffect } from "@react-navigation/native";
 import { BASE_URL } from "../helpers/ip";
 import Loading from "../Components/Loading";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "../stores/actions/actionCreator";
+import playSound from "../Components/Sound";
+
 export default function Gamescreen({ route, navigation }) {
     const { roomId } = route.params;
     const [room, setRoom] = useState({});
@@ -28,6 +32,13 @@ export default function Gamescreen({ route, navigation }) {
     const [player2, setPlayer2] = useState();
     const [powerUpLimit, setPowerUpLimit] = useState(2);
     const [isFocused, setIsFocused] = useState(false);
+    const dispatch = useDispatch();
+    const { user: userData } = useSelector((state) => state.user);
+
+    //! Player dalam device
+    useEffect(() => {
+        dispatch(fetchUser());
+    }, []);
 
     //! set Timer jalan ketika loading pemain dan loading soal selesai
     useFocusEffect(
@@ -111,6 +122,7 @@ export default function Gamescreen({ route, navigation }) {
                     });
                     await setQuestions(questions);
                     setLoadingQuestion(false);
+                    playSound();
                 } catch (err) {
                     console.log(err);
                 }
@@ -168,6 +180,18 @@ export default function Gamescreen({ route, navigation }) {
 
     const handlePowerUp = async () => {
         if (powerUpLimit > 0) {
+            //! Start of Kurangi Gem
+            const userRef = doc(db, "users", await AsyncStorage.getItem("userId"));
+            if (userData.gem > 0) {
+                await updateDoc(userRef, {
+                    gem: userData.gem - 1,
+                });
+                dispatch(fetchUser());
+            } else {
+                return null;
+            }
+            //! End of Gem berkurang satu
+
             setPowerUpLimit(powerUpLimit - 1);
             let newOptions = [];
             let num = 0;
@@ -188,7 +212,7 @@ export default function Gamescreen({ route, navigation }) {
     };
     //! loading sebelum game mulai
     if (loading) {
-        return <FindMatchScreen />;
+        return <FindMatchScreen roomId={roomId} navigation={navigation} />;
     }
 
     if (loadingQuestion) {
@@ -196,126 +220,118 @@ export default function Gamescreen({ route, navigation }) {
     }
 
     return (
-        <SafeAreaView>
-            <View style={styles.container}>
-                <View style={styles.profileScoreContainer}>
-                    <View style={styles.profileScore}>
-                        <Image
-                            style={styles.image}
-                            source={{
-                                uri: "https://img.freepik.com/free-vector/characters-celebrating-holi-festival-concept_23-2148405462.jpg?w=1060&t=st=1677830591~exp=1677831191~hmac=cb58a785423477d3131c5bc4d671edd861a29192d02521e4fe9431928c177f8e",
-                            }}
-                        />
-                        <View style={styles.textScoreContainer}>
-                            <Text>{player1.profileName}</Text>
-                            <Text>{room?.scorePlayer1}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.timeContainer}>
-                        <Text style={{ fontSize: 13 }}>Time Left</Text>
-                        <Text>{time}</Text>
-                    </View>
-                    <View style={styles.profileScoreLeftContainer}>
-                        <View style={styles.profileScoreLeft}>
-                            <Text>{player2.profileName}</Text>
-                            <Text>{room?.scorePlayer2}</Text>
-                        </View>
-                        <Image
-                            style={styles.image}
-                            source={{
-                                uri: "https://img.freepik.com/free-vector/characters-celebrating-holi-festival-concept_23-2148405462.jpg?w=1060&t=st=1677830591~exp=1677831191~hmac=cb58a785423477d3131c5bc4d671edd861a29192d02521e4fe9431928c177f8e",
-                            }}
-                        />
+        <View style={styles.container}>
+            <View style={styles.profileScoreContainer}>
+                <View style={styles.profileScore}>
+                    <Image
+                        style={styles.image}
+                        source={{
+                            uri: "https://img.freepik.com/free-vector/characters-celebrating-holi-festival-concept_23-2148405462.jpg?w=1060&t=st=1677830591~exp=1677831191~hmac=cb58a785423477d3131c5bc4d671edd861a29192d02521e4fe9431928c177f8e",
+                        }}
+                    />
+                    <View style={styles.textScoreContainer}>
+                        <Text>{player1.profileName}</Text>
+                        <Text>{room?.scorePlayer1}</Text>
                     </View>
                 </View>
-                {/* Ini show Gem */}
-                {/* <View style={styles.helper}>
-                    <View style={styles.gemContainer}>
-                        <View style={styles.iconContainer}>
-                            <Image style={styles.iconGem} source={require("../assets/icons8-sparkling-diamond-100.png")} />
-                        </View>
-                        <View>
-                            <Text>300</Text>
-                        </View>
+                <View style={styles.timeContainer}>
+                    <Text style={{ fontSize: 15, fontWeight: "bold" }}>Time Left</Text>
+                    <Text>{time}</Text>
+                </View>
+                <View style={styles.profileScore}>
+                    <View style={(styles.textScoreContainer, { paddingRight: 5 })}>
+                        <Text>{player2.profileName}</Text>
+                        <Text style={{ textAlign: "right" }}>{room?.scorePlayer2}</Text>
                     </View>
-                    <View style={styles.gemContainer}>
-                        <TouchableOpacity style={styles.iconContainer}>
-                            <Image style={styles.iconPowerUp} source={require("../assets/power.png")} />
-                        </TouchableOpacity>
-                    </View>
-                </View> */}
-
-                {counter < 5 ? (
-                    <>
-                        <View style={styles.questionBoxContainer}>
-                            <View style={styles.questionBox}>
-                                <Text style={styles.question}>{questions[counter].question}</Text>
-                            </View>
-                        </View>
-                        <View>
-                            {powerUpLimit > 0 && (
-                                <TouchableOpacity onPress={handlePowerUp}>
-                                    <Text>POWER UP!!!! count :{powerUpLimit}</Text>
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                        <View style={styles.answerContainer}>
-                            {options?.map((option, i) => {
-                                return isAnswer ? (
-                                    <TouchableOpacity key={`answered ${i}`} style={[styles.answerA, isFocused && styles.focusedButton]} onPress={() => handleCheck(option)} disabled={true}>
-                                        <Text style={[styles.textAnswer]}>{option}</Text>
-                                    </TouchableOpacity>
-                                ) : (
-                                    <TouchableOpacity key={`answeredd ${i}`} style={styles.answerA} onPress={() => handleCheck(option)}>
-                                        <Text style={styles.textAnswer}>{option}</Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
-                        </View>
-                    </>
-                ) : null}
+                    <Image
+                        style={styles.image}
+                        source={{
+                            uri: "https://img.freepik.com/free-vector/characters-celebrating-holi-festival-concept_23-2148405462.jpg?w=1060&t=st=1677830591~exp=1677831191~hmac=cb58a785423477d3131c5bc4d671edd861a29192d02521e4fe9431928c177f8e",
+                        }}
+                    />
+                </View>
             </View>
-        </SafeAreaView>
+            <View style={styles.helper}>
+                <View style={styles.gemContainer}>
+                    <View style={styles.iconContainer}>
+                        <Image style={styles.iconGem} source={require("../assets/icons8-sparkling-diamond-100.png")} />
+                    </View>
+                    <View>
+                        <Text>{userData?.gem}</Text>
+                    </View>
+                </View>
+                <View style={styles.gemContainer}>
+                    <TouchableOpacity style={styles.iconContainer} onPress={handlePowerUp}>
+                        <Image style={styles.iconPowerUp} source={require("../assets/power.png")} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            {counter < 5 ? (
+                <>
+                    <View style={styles.questionBoxContainer}>
+                        <View style={styles.questionBox}>
+                            <Text style={styles.question}>{questions[counter].question}</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.answerContainer}>
+                        {options?.map((option, i) => {
+                            return isAnswer ? (
+                                <TouchableOpacity key={`answered ${i}`} style={[styles.answerA, isFocused && styles.focusedButton]} onPress={() => handleCheck(option)} disabled={true}>
+                                    <Text style={[styles.textAnswer]}>{option}</Text>
+                                </TouchableOpacity>
+                            ) : (
+                                <TouchableOpacity key={`answeredd ${i}`} style={styles.answerA} onPress={() => handleCheck(option)}>
+                                    <Text style={styles.textAnswer}>{option}</Text>
+                                </TouchableOpacity>
+                            );
+                        })}
+                    </View>
+                </>
+            ) : null}
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     focusedButton: {
-        backgroundColor: "green",
+        backgroundColor: "red",
     },
     container: {
         backgroundColor: "#F6F8FF",
+        height: "100%",
+        width: "100%",
     },
     profileScoreContainer: {
         width: "100%",
         height: "10%",
         flexDirection: "row",
         alignItems: "center",
-        paddingTop: 5,
-        paddingRight: 19,
+        justifyContent: "space-between",
+        paddingRight: 37,
     },
     profileScore: {
-        width: "20%",
-        height: "80%",
-        marginLeft: 10,
+        width: 50,
+        height: 50,
         flexDirection: "row",
+        alignItems: "center",
     },
     image: {
         width: "90%",
         height: "90%",
         borderRadius: 100,
     },
-    textScoreContainer: { marginLeft: 10, justifyContent: "center" },
+    textScoreContainer: { marginLeft: 10, justifyContent: "center", flexDirection: "column" },
     timeContainer: {
-        width: "20%",
+        width: "auto",
         height: "80%",
-        marginLeft: 77,
         alignItems: "center",
+        paddingLeft: 30,
     },
     profileScoreLeftContainer: {
         width: "20%",
         height: "80%",
-        marginLeft: 25,
         flexDirection: "row",
     },
     profileScoreLeft: {
@@ -324,83 +340,11 @@ const styles = StyleSheet.create({
         marginRight: 10,
         alignItems: "flex-end",
     },
-    questionBoxContainer: {
-        width: "100%",
-        height: "25%",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    questionBox: {
-        backgroundColor: "white",
-        marginTop: 40,
-        width: "80%",
-        height: "90%",
-        borderRadius: 30,
-        justifyContent: "center",
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 8,
-        },
-        shadowOpacity: 0.46,
-        shadowRadius: 11.14,
-        elevation: 17,
-    },
-    question: { textAlign: "center", fontSize: 25, fontWeight: "bold" },
-    answerContainer: {
-        width: "100%",
-        height: "65%",
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 15,
-    },
-    answerA: {
-        backgroundColor: "#FFC3BD",
-        width: "70%",
-        height: "15%",
-        borderRadius: 30,
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 20,
-    },
-    answerB: {
-        backgroundColor: "#C8ECA4",
-        width: "70%",
-        height: "15%",
-        borderRadius: 30,
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 20,
-    },
-    answerC: {
-        backgroundColor: "#D8EBEB",
-        width: "70%",
-        height: "15%",
-        borderRadius: 30,
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 20,
-    },
-    answerD: {
-        backgroundColor: "#FEE4BD",
-        width: "70%",
-        height: "15%",
-        borderRadius: 30,
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 20,
-    },
-    textAnswer: {
-        fontSize: 20,
-        color: "white",
-        fontWeight: "bold",
-    },
     helper: {
         width: "100%",
         height: "10%",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "space-evenly",
         alignItems: "center",
     },
     gemContainer: {
@@ -428,5 +372,53 @@ const styles = StyleSheet.create({
         height: "90%",
         borderRadius: 100,
         marginLeft: 40,
+    },
+    questionBoxContainer: {
+        width: "100%",
+        height: "25%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    questionBox: {
+        backgroundColor: "white",
+        width: "80%",
+        height: "90%",
+        borderRadius: 30,
+        justifyContent: "center",
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        shadowOpacity: 0.46,
+        shadowRadius: 11.14,
+        elevation: 17,
+    },
+    question: {
+        textAlign: "center",
+        fontSize: 25,
+        fontWeight: "bold",
+    },
+    answerContainer: {
+        width: "100%",
+        alignItems: "center",
+        marginTop: 20,
+    },
+    answerA: {
+        backgroundColor: "#FFC3BD",
+        width: "70%",
+        height: 70,
+        borderRadius: 30,
+        justifyContent: "center",
+        alignItems: "center",
+        marginBottom: 20,
+        // backgroundColor:'yellow'
+    },
+    textAnswer: {
+        fontSize: 20,
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
     },
 });

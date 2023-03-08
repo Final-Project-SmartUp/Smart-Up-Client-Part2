@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import playSound from "../Components/Sound";
 
 const LandingPage = ({ navigation }) => {
     return (
@@ -10,17 +11,17 @@ const LandingPage = ({ navigation }) => {
                 <Image source={require("../assets/image.png")} style={styles.image} />
                 <Text style={styles.textHeader}>More than just a game</Text>
             </View>
-            <Pressable style={styles.button1} onPress={() => navigation.navigate("Register")}>
+            <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate("Register")}>
                 <Text style={styles.textButton}>CREATE ACCOUNT</Text>
-            </Pressable>
-            <Pressable
+            </TouchableOpacity>
+            <TouchableOpacity
                 style={styles.button2}
                 onPress={() => {
                     navigation.navigate("Login");
                 }}
             >
                 <Text style={styles.textButton}>SIGN IN</Text>
-            </Pressable>
+            </TouchableOpacity>
         </View>
         // </SafeAreaView>
     );
