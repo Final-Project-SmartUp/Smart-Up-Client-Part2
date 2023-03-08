@@ -1,10 +1,13 @@
-import { FETCH_USER_PENDING, FETCH_USER_REJECT, FETCH_USER_SUCCESS } from "../actions/actionType";
+import { FETCH_USER_PENDING, FETCH_USER_REJECT, FETCH_USER_SUCCESS,FETCH_FRIENDLIST_SUCCESS , FETCH_FRIENDLIST_PENDING } from "../actions/actionType";
 
 const initialState = {
     fetchUserLoading: true,
     user: {},
     errorMsg: "",
+    friendRequest:[],
+    fetchFriendRequestLoading:true
 };
+
 
 
 function userReducer(state = initialState, action) {
@@ -26,7 +29,17 @@ function userReducer(state = initialState, action) {
                 fetchPostsLoading: false,
                 errorMsg: action.payload,
             };
-
+        case FETCH_FRIENDLIST_SUCCESS:
+            return{
+                ...state,
+                friendRequest: action.payload,
+                fetchFriendRequestLoading:false
+            }
+        case FETCH_FRIENDLIST_PENDING:
+            return{
+                ...state,
+                fetchFriendRequestLoading:true
+            }
         default:
             return state;
     }

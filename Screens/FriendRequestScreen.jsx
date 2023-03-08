@@ -1,81 +1,39 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native";
 import FriendRequest from "../Components/FriendRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFriendRequest } from "../stores/actions/actionCreator";
 
 const FriendRequestScreen = () => {
+    const dispatch = useDispatch()
+    const {friendRequest,fetchFriendRequestLoading} = useSelector((state)=>{
+        return state.user
+    })
+    console.log(friendRequest,"ini friend Request")
     const [item, setItem] = useState();
+    useEffect(()=>{
+        dispatch(fetchFriendRequest())
+    },[])
+    
+    if(fetchFriendRequestLoading){
+        return(
+            <View>
+                <Text>
+                    LOADING!!!!!!!
+                </Text>
+            </View>
+        )
+    }
 
-    const DATA = [
-        {
-            id: "1",
-            title: "First Item",
-            rrm: 300,
-        },
-        {
-            id: "2",
-            title: "Second Item",
-            rrm: 300,
-        },
-        {
-            id: "3",
-            title: "Third Item",
-            rrm: 300,
-        },
-        {
-            id: "4",
-            title: "Second Item",
-            rrm: 300,
-        },
-        {
-            id: "5",
-            title: "Third Item",
-            rrm: 300,
-        },
-        {
-            id: "6",
-            title: "Second Item",
-            rrm: 300,
-        },
-        {
-            id: "7",
-            title: "Third Item",
-            rrm: 300,
-        },
-        {
-            id: "8",
-            title: "Second Item",
-            rrm: 300,
-        },
-        {
-            id: "9",
-            title: "Third Item",
-            rrm: 300,
-        },
-        {
-            id: "10",
-            title: "Third Item",
-            rrm: 300,
-        },
-        {
-            id: "11",
-            title: "Third Item",
-            rrm: 300,
-        },
-        {
-            id: "12",
-            title: "Third Item",
-            rrm: 300,
-        },
-    ];
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.header}>
                 <Text style={styles.textTitle}>Friend Request</Text>
             </View>
             <View style={styles.table}>
-                <FlatList data={DATA} renderItem={({ item }) => <FriendRequest data={item} />} keyExtractor={(item) => item.id} />
+                <FlatList data={friendRequest} renderItem={({ item }) => <FriendRequest data={item} />} keyExtractor={(item) => item.id} />
             </View>
         </SafeAreaView>
     );

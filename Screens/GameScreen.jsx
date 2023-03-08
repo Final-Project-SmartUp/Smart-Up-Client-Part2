@@ -159,6 +159,7 @@ export default function Gamescreen({ route, navigation }) {
     //! handleCheck
     const handleCheck = async (option) => {
         setSelected(option);
+        
         setIsAnswer(true);
         setIsFocused(true);
         if (option === questions[counter]?.correctAnswer) {
@@ -278,7 +279,8 @@ export default function Gamescreen({ route, navigation }) {
                     <View style={styles.answerContainer}>
                         {options?.map((option, i) => {
                             return isAnswer ? (
-                                <TouchableOpacity key={`answered ${i}`} style={[styles.answerA, isFocused && styles.focusedButton]} onPress={() => handleCheck(option)} disabled={true}>
+                                // if option === questions[counter]
+                                <TouchableOpacity key={`answered ${i}`} style={option === questions[counter].correctAnswer ? [styles.answerA,styles.focusedButton] : styles.answerA} onPress={() => handleCheck(option)} disabled={true}>
                                     <Text style={[styles.textAnswer]}>{option}</Text>
                                 </TouchableOpacity>
                             ) : (

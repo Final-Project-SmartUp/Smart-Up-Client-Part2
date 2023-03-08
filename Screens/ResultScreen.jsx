@@ -111,6 +111,34 @@ export default function ResultScreen({ route, navigation }) {
         }, [])
     );
 
+    const handleAddFriend= async()=>{
+        const userId = await AsyncStorage.getItem("userId")
+        const token = await AsyncStorage.getItem("access_token")
+        try {
+            if(userId === room.player1){
+                const {data} = await axios({
+                    method:'post',
+                    url:`http://${BASE_URL}:3001/friends/${room.player2}`,
+                    headers:{
+                        access_token: token
+                    }
+                })
+                console.log("masuk 1")
+            } else if (userId === room.player2){
+                const {data} = await axios({
+                    method:'post',
+                    url:`http://${BASE_URL}:3001/friends/${room.player1}`,
+                    headers:{
+                        access_token: token
+                    }
+                })
+                console.log("masuk 2")
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     // useEffect(() => {
     //     (async () => {
     //         try {
@@ -239,8 +267,8 @@ export default function ResultScreen({ route, navigation }) {
                     </View>
                 </View>
                 <View style={styles.options}>
-                    <Pressable style={styles.rematchButton}>
-                        <Text style={styles.textOptions}>REMATCH</Text>
+                    <Pressable style={styles.rematchButton} onPress={handleAddFriend}>
+                        <Text style={styles.textOptions}>ADD FRIEND</Text>
                     </Pressable>
                     <Pressable style={styles.playAnotherButton}>
                         <Text style={styles.textOptions}>PLAY ANOTHER</Text>

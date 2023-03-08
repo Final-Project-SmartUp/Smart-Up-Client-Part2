@@ -1,7 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "../../helpers/ip";
-import { FETCH_POSTS_PENDING, FETCH_POSTS_REJECT, FETCH_POSTS_SUCCESS, FETCH_USER_PENDING, FETCH_USER_SUCCESS } from "./actionType";
+import { FETCH_FRIENDLIST_PENDING, FETCH_FRIENDLIST_SUCCESS, FETCH_POSTS_PENDING, FETCH_POSTS_REJECT, FETCH_POSTS_SUCCESS, FETCH_USER_PENDING, FETCH_USER_SUCCESS } from "./actionType";
 
 import { FETCH_POST_PENDING, FETCH_POST_REJECT, FETCH_POST_SUCCESS } from "./actionType";
 
@@ -101,6 +101,15 @@ const fetchPostReject = (errorMessage) => ({
     payload: errorMessage,
 });
 
+const fetchFriendListPending = () =>({
+    type: FETCH_FRIENDLIST_PENDING
+})
+
+const fetchFriendListSuccess = (data) => ({
+    type: FETCH_FRIENDLIST_SUCCESS,
+    payload: data
+})
+
 export const fetchPost = (postId) => {
     return async (dispatch, getState) => {
         try {
@@ -120,3 +129,20 @@ export const fetchPost = (postId) => {
         }
     };
 };
+
+export const fetchFriendRequest = () => async(dispatch) =>{
+    const token = await AsyncStorage.getItem("access_token")
+    try {
+        dispatch(fetchFriendListPending())
+        const {data} = await axios ({
+            method:'get',
+            url:`http://${BASE_URL}:3001/friends/requestFriend`,
+            headers: {
+                access_token : token
+            }
+        })
+        dispatch(fetchFriendListSuccess(data))
+    } catch (err) {
+        console.log(err)
+    }
+}
