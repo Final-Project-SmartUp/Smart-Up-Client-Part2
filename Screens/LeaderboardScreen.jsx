@@ -6,6 +6,7 @@ import LeaderboardComponent from "../Components/LeaderBoard";
 import db from "../config/firebaseConnection";
 import { BASE_URL } from "../helpers/ip";
 import axios from "axios";
+import Loading from "../Components/Loading";
 
 export default function Leaderboard() {
     const [listofPlayer, setListofPlayer] = useState();
@@ -21,7 +22,7 @@ export default function Leaderboard() {
                     });
                     setListofPlayer(leaderboard);
                 });
-                return () => unsubscribe()
+                return () => unsubscribe();
             } catch (err) {
                 console.log(err);
             }
@@ -87,7 +88,7 @@ export default function Leaderboard() {
     );
 
     if (listofPlayer === undefined) {
-        return <Text>Masih Loading leaderboard</Text>;
+        return <Loading />;
     }
 
     return (

@@ -1,9 +1,9 @@
-export const BASE_URL = `192.168.2.234`; //ip daffa
+// export const BASE_URL = `192.168.2.234`; //ip daffa
 // export const BASE_URL = `192.168.0.177`; //ip daffa
 // export const BASE_URL = `192.168.111.60`; //IP WILLY
 // export const BASE_URL = `192.168.2.234`; //ip daffa
 // export const BASE_URL = `192.168.2.234`; //ip daffa
-// export const BASE_URL = `192.168.111.60`; //IP WILLY
+export const BASE_URL = `192.168.111.60`; //IP WILLY
 // export const BASE_URL = `192.168.68.113`; //IP KOSAN WILLY
 // export const BASE_URL = `172.20.10.4`; //IP Hotspot beauty
 // export const BASE_URL = `192.168.2.60`; //IP Hotspot Daffa

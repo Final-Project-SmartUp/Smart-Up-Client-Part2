@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react"
-import { WebView } from "react-native-webview"
+import React, { useState, useEffect } from "react";
+import { WebView } from "react-native-webview";
 
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> chat-Attempt
-export default function HandlePayment({route}) {
+export default function HandlePayment({ route }) {
     // const [redirectUrl,setRedirectUrl] = useState("")
-    const redirectUrl = route.params
-   
+    const redirectUrl = route.params;
+
     return (
         <>
             <WebView
@@ -19,5 +14,5 @@ export default function HandlePayment({route}) {
                 style={{ flex: 1 }}
             />
         </>
-    )
+    );
 }
