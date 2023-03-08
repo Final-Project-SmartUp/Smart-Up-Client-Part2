@@ -1,15 +1,19 @@
 import { TextInput, View, Button, Text, ScrollView, Pressable, Image, StyleSheet, Touchable, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BASE_URL } from "../helpers/ip";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch } from "react-redux";
-import { fetchPost } from "../stores/actions/actionCreator";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPost, fetchUser } from "../stores/actions/actionCreator";
+import { tertiartyColor } from "../config/colors";
+import Loading from "../Components/Loading";
 
 export default function AddCommentScreen({ route, navigation }) {
     const [comment, setComment] = useState();
-    const postId = route.params;
+    const { user, fetchUserLoading } = useSelector((state) => state.user);
+    const { postId, image } = route.params;
     const dispatch = useDispatch();
+
     const addComment = async () => {
         try {
             const { data: newComment } = await axios({
@@ -31,6 +35,10 @@ export default function AddCommentScreen({ route, navigation }) {
         }
     };
 
+    useEffect(() => {
+        dispatch(fetchUser());
+    }, []);
+
     return (
         <KeyboardAvoidingView behavior="height" style={styles.container}>
             <View style={styles.exit}>{/* <Image style={styles.icon} source={require("../assets/icons8-close-window-48.png")} /> */}</View>
@@ -39,7 +47,7 @@ export default function AddCommentScreen({ route, navigation }) {
                     <Image
                         style={styles.image}
                         source={{
-                            uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                            uri: user?.image,
                         }}
                     />
                 </View>
@@ -110,7 +118,7 @@ const styles = StyleSheet.create({
         // backgroundColor:'yellow'
     },
     postButton: {
-        backgroundColor: "#A8D978",
+        backgroundColor: tertiartyColor,
         width: "20%",
         alignItems: "center",
         justifyContent: "center",

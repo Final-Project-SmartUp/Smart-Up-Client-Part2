@@ -5,9 +5,10 @@ import { BASE_URL } from "../helpers/ip";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { fetchPosts } from "../stores/actions/actionCreator";
+import { tertiartyColor } from "../config/colors";
 
 export default function AddPost({ route, navigation }) {
-    const categoryId = route.params;
+    const { categoryId, currentUser } = route.params;
     const [post, setPost] = useState("");
     const dispatch = useDispatch();
 
@@ -41,7 +42,7 @@ export default function AddPost({ route, navigation }) {
                     <Image
                         style={styles.image}
                         source={{
-                            uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                            uri: currentUser.image,
                         }}
                     />
                 </View>
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
         // backgroundColor:'yellow'
     },
     postButton: {
-        backgroundColor: "#A8D978",
+        backgroundColor: tertiartyColor,
         width: "20%",
         alignItems: "center",
         justifyContent: "center",

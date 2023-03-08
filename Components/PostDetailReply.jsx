@@ -1,14 +1,38 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import { primaryColor } from "../config/colors";
+import { BASE_URL } from "../helpers/ip";
 
 export default function PostDetailReply({ data }) {
+    const [user, setUser] = useState();
+    const userId = data.UserId;
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data: userData } = await axios({
+                    method: "GET",
+                    url: `http://${BASE_URL}:3001/users/${userId}`,
+                    headers: {
+                        access_token: await AsyncStorage.getItem("access_token"),
+                    },
+                });
+                setUser(userData);
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.profileImageReplyContainer}>
                 <Image
                     style={styles.imageReply}
                     source={{
-                        uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                        uri: user?.image,
                     }}
                 />
             </View>
@@ -63,10 +87,10 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         borderRadius: 15,
         padding: 3,
+        paddingHorizontal: 10,
         width: "auto",
-        paddingRight: 3,
     },
     reply: {
-        fontSize: 12,
+        fontSize: 14,
     },
 });

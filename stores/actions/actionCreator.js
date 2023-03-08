@@ -101,14 +101,14 @@ const fetchPostReject = (errorMessage) => ({
     payload: errorMessage,
 });
 
-const fetchFriendListPending = () =>({
-    type: FETCH_FRIENDLIST_PENDING
-})
+const fetchFriendListPending = () => ({
+    type: FETCH_FRIENDLIST_PENDING,
+});
 
 const fetchFriendListSuccess = (data) => ({
     type: FETCH_FRIENDLIST_SUCCESS,
-    payload: data
-})
+    payload: data,
+});
 
 export const fetchPost = (postId) => {
     return async (dispatch, getState) => {
@@ -130,19 +130,19 @@ export const fetchPost = (postId) => {
     };
 };
 
-export const fetchFriendRequest = () => async(dispatch) =>{
-    const token = await AsyncStorage.getItem("access_token")
+export const fetchFriendRequest = () => async (dispatch) => {
+    const token = await AsyncStorage.getItem("access_token");
     try {
-        dispatch(fetchFriendListPending())
-        const {data} = await axios ({
-            method:'get',
-            url:`http://${BASE_URL}:3001/friends/requestFriend`,
+        dispatch(fetchFriendListPending());
+        const { data } = await axios({
+            method: "get",
+            url: `http://${BASE_URL}:3001/friends/requestFriend`,
             headers: {
-                access_token : token
-            }
-        })
-        dispatch(fetchFriendListSuccess(data))
+                access_token: token,
+            },
+        });
+        dispatch(fetchFriendListSuccess(data));
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-}
+};

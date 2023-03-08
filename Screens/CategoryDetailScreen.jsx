@@ -12,6 +12,7 @@ import { useFocusEffect } from "@react-navigation/core";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "../stores/actions/actionCreator";
 import Loading from "../Components/Loading";
+import { primaryColor, tertiartyColor } from "../config/colors";
 
 export default function CategoryDetail({ navigation, route }) {
     const { categoryId } = route.params;
@@ -30,7 +31,7 @@ export default function CategoryDetail({ navigation, route }) {
     //! Aktifkan tombol findMatch (isFindMatch Jadi True)
     const playGame = async () => {
         try {
-            console.log(await AsyncStorage.getItem("userId"))
+            console.log(await AsyncStorage.getItem("userId"));
             const userRef = doc(db, "users", await AsyncStorage.getItem("userId"));
             await updateDoc(userRef, {
                 isFindMatch: true,
@@ -80,6 +81,7 @@ export default function CategoryDetail({ navigation, route }) {
                 username: data.username,
                 isFindMatch: data.isFindMatch,
                 isPlaying: data.isPlaying,
+                image: data.image,
             });
         }
         setUser();
@@ -121,7 +123,7 @@ export default function CategoryDetail({ navigation, route }) {
                                     roomId: newRoom.id,
                                 });
                             } else if (allRooms.length > 0) {
-                                console.log("masuk sini")
+                                console.log("masuk sini");
                                 const { data: joinRoom } = await axios({
                                     method: "PUT",
                                     url: `http://${BASE_URL}:3001/rooms/${allRooms[0].id}`,
@@ -218,7 +220,7 @@ export default function CategoryDetail({ navigation, route }) {
 
     //! Pindah ke halaman add Post
     const handleAddPost = () => {
-        navigation.navigate("AddPostScreen", categoryId);
+        navigation.navigate("AddPostScreen", { categoryId, currentUser });
     };
 
     if (loadingCategoryDetail) {
@@ -284,7 +286,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 20,
         fontWeight: "bold",
-        color: "#B19C77",
+        color: tertiartyColor,
     },
     imageContainer: {
         backgroundColor: "#FEE4BD",
@@ -300,7 +302,7 @@ const styles = StyleSheet.create({
         height: "80%",
     },
     borderImage: {
-        backgroundColor: "#B19C77",
+        backgroundColor: tertiartyColor,
         marginTop: 30,
         width: "35%",
         height: "15%",
@@ -314,18 +316,18 @@ const styles = StyleSheet.create({
         color: "white",
     },
     postButton: {
-        backgroundColor: "#B19C77",
+        backgroundColor: primaryColor,
         marginBottom: 3,
         height: "4%",
         width: "30%",
         marginLeft: 10,
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 100,
+        borderRadius: 30,
     },
     textPost: {
         fontWeight: "bold",
-        color: "white",
+        color: tertiartyColor,
     },
     flatListContainer: {
         flex: 1,
