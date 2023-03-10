@@ -1,7 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "../../helpers/ip";
-import { FETCH_FRIENDLIST_PENDING, FETCH_FRIENDLIST_SUCCESS, FETCH_POSTS_PENDING, FETCH_POSTS_REJECT, FETCH_POSTS_SUCCESS, FETCH_USER_PENDING, FETCH_USER_SUCCESS } from "./actionType";
+import { FETCH_FRIENDLIST_PENDING, FETCH_FRIENDLIST_REJECT, FETCH_FRIENDLIST_SUCCESS, FETCH_POSTS_PENDING, FETCH_POSTS_REJECT, FETCH_POSTS_SUCCESS, FETCH_USER_PENDING, FETCH_USER_SUCCESS } from "./actionType";
 
 import { FETCH_POST_PENDING, FETCH_POST_REJECT, FETCH_POST_SUCCESS } from "./actionType";
 
@@ -109,6 +109,10 @@ const fetchFriendListSuccess = (data) => ({
     type: FETCH_FRIENDLIST_SUCCESS,
     payload: data,
 });
+const fetchFriendListReject = (err) => ({
+    type: FETCH_FRIENDLIST_REJECT,
+    payload: err,
+});
 
 export const fetchPost = (postId) => {
     return async (dispatch, getState) => {
@@ -143,6 +147,7 @@ export const fetchFriendRequest = () => async (dispatch) => {
         });
         dispatch(fetchFriendListSuccess(data));
     } catch (err) {
+        dispatch(fetchFriendListReject(err));
         console.log(err);
     }
 };

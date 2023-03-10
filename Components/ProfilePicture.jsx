@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 
-export default function ProfilePicture() {
+export default function ProfilePicture({ image }) {
     return (
         <View
             style={{
@@ -16,7 +16,7 @@ export default function ProfilePicture() {
             <Image
                 style={styles.image}
                 source={{
-                    uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                    uri: image,
                 }}
             />
         </View>

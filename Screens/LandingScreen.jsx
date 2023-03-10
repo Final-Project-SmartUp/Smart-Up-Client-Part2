@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Image, ScrollView, Pressable, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import playSound from "../Components/Sound";
+import { secondaryColor, tertiartyColor } from "../config/colors";
 
 const LandingPage = ({ navigation }) => {
     return (
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#A8D978",
+        backgroundColor: tertiartyColor,
     },
     textContainer: {
         marginTop: 90,
@@ -48,14 +49,14 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginBottom: 10,
         fontSize: 20,
-        color: "#8d4e42",
+        color: secondaryColor,
         fontWeight: "bold",
         // fontFamily: 'Poppins'
     },
     button1: {
         marginTop: 240,
         width: "90%",
-        height: "5%",
+        height: "8%",
         marginBottom: 10,
         borderRadius: 20,
         borderWidth: 2,
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     button2: {
         marginTop: 20,
         width: "90%",
-        height: "5%",
+        height: "8%",
         marginBottom: 32,
         borderRadius: 20,
         borderWidth: 2,
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     textButton: {
-        color: "#A8D978",
+        color: tertiartyColor,
         textAlign: "center",
         fontWeight: "bold",
         fontSize: 18,

@@ -8,6 +8,7 @@ import { primaryColor, secondaryColor, tertiartyColor } from "../config/colors";
 import { BASE_URL } from "../helpers/ip";
 import { fetchPost, fetchPosts } from "../stores/actions/actionCreator";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Loading from "../Components/Loading";
 
 export default function PostDetail({ route, navigation }) {
     const postId = route.params;
@@ -44,7 +45,7 @@ export default function PostDetail({ route, navigation }) {
     };
 
     if (loadingUserPost || fetchPostLoading) {
-        return <Text>Masih Loading....</Text>;
+        return <Loading />;
     }
 
     return (

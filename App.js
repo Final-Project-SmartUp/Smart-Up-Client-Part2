@@ -93,14 +93,14 @@ export default function App() {
                                 <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
                                 <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }} />
                                 <Stack.Screen name="Home" component={ShowTab} options={{ headerShown: false }} />
-                                <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
+                                <Stack.Screen name="CategoryDetail" component={CategoryDetail} options={{title: ""}}/>
                                 <Stack.Screen name="PostDetailScreen" component={PostDetail} options={{ headerShown: false }} />
-                                <Stack.Screen name="HandlePayment" component={HandlePayment} />
-                                <Stack.Screen name="AddPostScreen" component={AddPost} />
+                                <Stack.Screen name="HandlePayment" component={HandlePayment} options={{title: ""}}/>
+                                <Stack.Screen name="AddPostScreen" component={AddPost} options={{title: ""}}/>
                                 <Stack.Screen name="AddCommentScreen" component={AddCommentScreen} />
-                                <Stack.Screen name="Gamescreen" component={Gamescreen} />
-                                <Stack.Screen name="ResultScreen" component={ResultScreen} />
-                                <Stack.Screen name="EditProfile" component={EditProfile} />
+                                <Stack.Screen name="Gamescreen" component={Gamescreen} options={{ headerShown: false }} />
+                                <Stack.Screen name="ResultScreen" component={ResultScreen} options={{ headerShown: false }} />
+                                <Stack.Screen name="EditProfile" component={EditProfile} options={{title: ""}}/>
                             </>
                         ) : (
                             <>

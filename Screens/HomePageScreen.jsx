@@ -7,11 +7,14 @@ import Loading from "../Components/Loading";
 import Categories from "../Components/Categories";
 import Animated, { SlideInDown, SlideInLeft, SlideInRight, SlideInUp } from "react-native-reanimated";
 import { fontHeaderBold, fontHeaderSize, secondaryColor, tertiartyColor } from "../config/colors";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "../stores/actions/actionCreator";
 
 export default function HomePage({ navigation }) {
     const [categories, setCategories] = useState();
     const [loadingCategories, setLoadingCategories] = useState(true);
-
+    const { user, fetchUserLoading } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
     //! Pindah page ke category Detail yang dipilih
     const handleChooseCategory = (categoryId) => {
         navigation.navigate("CategoryDetail", { categoryId });
@@ -28,6 +31,7 @@ export default function HomePage({ navigation }) {
                         access_token: await AsyncStorage.getItem("access_token"),
                     },
                 });
+                dispatch(fetchUser());
                 setCategories(categories);
                 setLoadingCategories(false);
             } catch (err) {
@@ -102,6 +106,11 @@ export default function HomePage({ navigation }) {
             rrm: 300,
         },
     ];
+
+    if (fetchUserLoading) {
+        return <Loading />;
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.profileContainer}>
@@ -109,7 +118,7 @@ export default function HomePage({ navigation }) {
                     <Image
                         style={styles.image}
                         source={{
-                            uri: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
+                            uri: user?.image,
                         }}
                     />
                 </View>

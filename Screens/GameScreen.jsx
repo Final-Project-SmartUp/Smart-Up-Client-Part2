@@ -35,7 +35,7 @@ export default function Gamescreen({ route, navigation }) {
     const [isFocused, setIsFocused] = useState(false);
     const dispatch = useDispatch();
     const { user: userData } = useSelector((state) => state.user);
-
+    console.log(questions[counter]?.correctAnswer, "ini jawabannya bang");
     //! Player dalam device
     useEffect(() => {
         dispatch(fetchUser());
@@ -222,7 +222,7 @@ export default function Gamescreen({ route, navigation }) {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.profileScoreContainer}>
                 <View style={styles.profileScore}>
                     <Image
@@ -298,7 +298,7 @@ export default function Gamescreen({ route, navigation }) {
                     </View>
                 </>
             ) : null}
-        </View>
+        </SafeAreaView>
     );
 }
 

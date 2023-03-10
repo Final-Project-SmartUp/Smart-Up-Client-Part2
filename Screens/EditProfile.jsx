@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../stores/actions/actionCreator";
 import Loading from "../Components/Loading";
 import ProfilePicture from "../Components/ProfilePicture";
+import { primaryColor, secondaryColor, tertiartyColor } from "../config/colors";
 
 export default function EditProfile({ navigation }) {
     const dispatch = useDispatch();
@@ -38,8 +39,8 @@ export default function EditProfile({ navigation }) {
         if (!result.canceled) {
             const uri = result.assets[0].uri;
             const filename = uri.split("/").pop();
-            console.log(uri)
-            console.log(filename,"<<<<<<")
+            console.log(uri);
+            console.log(filename, "<<<<<<");
             const formData = new FormData();
             formData.append("image", {
                 uri,
@@ -114,7 +115,7 @@ export default function EditProfile({ navigation }) {
                             <TextInput style={styles.textInput} placeholderTextColor="#C0C0C0" placeholder="Profile Name" editable multiline numberOfLines={4} maxLength={40} defaultValue={user?.profileName} onChangeText={getDataValue} />
                             <Text style={styles.fontEmailContainer}>Email:</Text>
                             <View style={styles.textInput}>
-                                <Text style={[styles.fontInput, { color: "grey" }]}>hilu@mail.com</Text>
+                                <Text style={[styles.fontInput, { color: "grey" }]}>{user?.email}</Text>
                             </View>
                             <TouchableOpacity onPress={uploadFileAndString} style={styles.button}>
                                 <Text style={styles.textButton}>Save</Text>
@@ -130,7 +131,7 @@ export default function EditProfile({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         height: "100%",
-        backgroundColor: "#92C8C7",
+        backgroundColor: tertiartyColor,
         paddingTop: 40,
         //   backgroundColor:'red'
     },
@@ -143,19 +144,19 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 40,
         fontWeight: "bold",
-        color: "white",
+        color: primaryColor,
     },
     editContainer: {
         marginTop: 90,
         width: "100%",
         height: "220%",
-        backgroundColor: "white",
+        backgroundColor: secondaryColor,
         alignItems: "center",
         borderRadius: 30,
         justifyContent: "center",
     },
     profileImage: {
-        backgroundColor: "#D3ECEB",
+        backgroundColor: tertiartyColor,
         width: "30%",
         height: "20%",
         marginBottom: 20,
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
         width: "90%",
         justifyContent: "center",
-        backgroundColor: "#D3ECEB",
+        backgroundColor: primaryColor,
         paddingLeft: 10,
         paddingRight: 10,
         borderRadius: 30,
@@ -209,18 +210,16 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 20,
-        width: "60%",
+        width: "55%",
         height: "15%",
         borderRadius: 20,
-        borderWidth: 2,
-        backgroundColor: "white",
-        borderColor: "white",
+        backgroundColor: tertiartyColor,
         justifyContent: "center",
         alignItems: "center",
         marginLeft: 75,
     },
     textButton: {
-        color: "#0A7F7F",
+        color: secondaryColor,
         textAlign: "center",
         fontWeight: "bold",
         fontSize: 18,

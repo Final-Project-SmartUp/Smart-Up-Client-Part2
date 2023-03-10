@@ -8,7 +8,7 @@ import { fetchFriendRequest, fetchUser } from "../stores/actions/actionCreator";
 import FriendList from "../Components/FriendList";
 import { FlatList } from "react-native";
 import Loading from "../Components/Loading";
-import { primaryColor, secondaryColor, tertiartyColor } from "../config/colors";
+import { fontHeaderSize, primaryColor, secondaryColor, tertiartyColor } from "../config/colors";
 
 const ProfilePage = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         color: "white",
     },
     description: {
-        fontSize: 25,
+        fontSize: fontHeaderSize,
         color: primaryColor,
         marginBottom: 25,
         fontWeight: "bold",

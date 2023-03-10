@@ -21,6 +21,8 @@ export default function ResultScreen({ route, navigation }) {
     const [player2ID, setPlayer2ID] = useState();
     const [mmrPlayer1, setMmrPlayer1] = useState();
     const [mmrPlayer2, setMmrPlayer2] = useState();
+    const [imagePlayer1, setImagePlayer1] = useState();
+    const [imagePlayer2, setImagePlayer2] = useState();
 
     const handleBackToHome = async () => {
         try {
@@ -103,6 +105,8 @@ export default function ResultScreen({ route, navigation }) {
                     setPlayer2(player2.profileName);
                     setMmrPlayer1(player1.mmr);
                     setMmrPlayer2(player2.mmr);
+                    setImagePlayer1(player1.image);
+                    setImagePlayer2(player2.image);
                     setLoading(false);
                 } catch (err) {
                     console.log(err);
@@ -111,33 +115,33 @@ export default function ResultScreen({ route, navigation }) {
         }, [])
     );
 
-    const handleAddFriend= async()=>{
-        const userId = await AsyncStorage.getItem("userId")
-        const token = await AsyncStorage.getItem("access_token")
+    const handleAddFriend = async () => {
+        const userId = await AsyncStorage.getItem("userId");
+        const token = await AsyncStorage.getItem("access_token");
         try {
-            if(userId === room.player1){
-                const {data} = await axios({
-                    method:'post',
-                    url:`http://${BASE_URL}:3001/friends/${room.player2}`,
-                    headers:{
-                        access_token: token
-                    }
-                })
-                console.log("masuk 1")
-            } else if (userId === room.player2){
-                const {data} = await axios({
-                    method:'post',
-                    url:`http://${BASE_URL}:3001/friends/${room.player1}`,
-                    headers:{
-                        access_token: token
-                    }
-                })
-                console.log("masuk 2")
+            if (userId === room.player1) {
+                const { data } = await axios({
+                    method: "post",
+                    url: `http://${BASE_URL}:3001/friends/${room.player2}`,
+                    headers: {
+                        access_token: token,
+                    },
+                });
+                console.log("masuk 1");
+            } else if (userId === room.player2) {
+                const { data } = await axios({
+                    method: "post",
+                    url: `http://${BASE_URL}:3001/friends/${room.player1}`,
+                    headers: {
+                        access_token: token,
+                    },
+                });
+                console.log("masuk 2");
             }
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
-    }
+    };
 
     // useEffect(() => {
     //     (async () => {
@@ -228,7 +232,7 @@ export default function ResultScreen({ route, navigation }) {
                 </View>
                 <View style={styles.playersContainer}>
                     <View style={styles.profileContainer}>
-                        <ProfilePicture />
+                        <ProfilePicture image={imagePlayer1} />
                         <Text style={styles.textPlayer}>{player1}</Text>
 
                         <View style={styles.mmrContainer}>
@@ -236,7 +240,7 @@ export default function ResultScreen({ route, navigation }) {
                         </View>
                     </View>
                     <View style={styles.profileContainer}>
-                        <ProfilePicture />
+                        <ProfilePicture image={imagePlayer2} />
                         <Text style={styles.textPlayer}>{player2}</Text>
 
                         <View style={styles.mmrContainer}>

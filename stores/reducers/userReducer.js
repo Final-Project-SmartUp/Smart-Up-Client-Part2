@@ -1,45 +1,49 @@
-import { FETCH_USER_PENDING, FETCH_USER_REJECT, FETCH_USER_SUCCESS,FETCH_FRIENDLIST_SUCCESS , FETCH_FRIENDLIST_PENDING } from "../actions/actionType";
+import { FETCH_USER_PENDING, FETCH_USER_REJECT, FETCH_USER_SUCCESS, FETCH_FRIENDLIST_SUCCESS, FETCH_FRIENDLIST_PENDING, FETCH_FRIENDLIST_REJECT } from "../actions/actionType";
 
 const initialState = {
     fetchUserLoading: true,
     user: {},
     errorMsg: "",
-    friendRequest:[],
-    fetchFriendRequestLoading:true
+    friendRequest: [],
+    fetchFriendRequestLoading: true,
 };
-
-
 
 function userReducer(state = initialState, action) {
     switch (action.type) {
         case FETCH_USER_PENDING:
             return {
                 ...initialState,
-                fetchPostsLoading: true,
+                fetchUserLoading: true,
             };
         case FETCH_USER_SUCCESS:
             return {
                 ...state,
-                fetchPostsLoading: false,
+                fetchUserLoading: false,
                 user: action.payload,
             };
         case FETCH_USER_REJECT:
             return {
                 ...state,
-                fetchPostsLoading: false,
+                fetchUserLoading: false,
                 errorMsg: action.payload,
             };
         case FETCH_FRIENDLIST_SUCCESS:
-            return{
+            return {
                 ...state,
                 friendRequest: action.payload,
-                fetchFriendRequestLoading:false
-            }
+                fetchFriendRequestLoading: false,
+            };
         case FETCH_FRIENDLIST_PENDING:
-            return{
+            return {
+                ...initialState,
+                fetchFriendRequestLoading: true,
+            };
+        case FETCH_FRIENDLIST_REJECT:
+            return {
                 ...state,
-                fetchFriendRequestLoading:true
-            }
+                errorMsg: action.payload,
+                fetchFriendRequestLoading: false,
+            };
         default:
             return state;
     }
